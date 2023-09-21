@@ -71,8 +71,6 @@ for image in images:
 #      2. Create 1-dimensional Gaussian Filter Mask       #
 # ========================================================#
 
-
-
 def gaussian_filter(standard_deviation):
 
     # Create empty matrix in order to iterate through and use a Gaussian Function
@@ -150,3 +148,64 @@ def gaussian_filter_partial_derivative_y(standard_deviation):
             
 
 print(gaussian_filter_partial_derivative_y(1))
+
+
+# =============================================================================================#
+#      3. Convolve the Image with the Partial Derivative of the Gaussian Function              #
+# =============================================================================================#
+
+def convolve(input_image, kernel):
+
+    convolved_images = None
+    
+    # Get the dimensions for the input images converted to a matrix
+    image_h = input_image.shape[0]
+    image_w = input_image.shape[1]
+
+    # Get the dimensions for kernel mask. The kernel mask is a matrix.
+    kernel_h = kernel.shape[0]
+    kernel_w = kernel.shape[1]
+
+    # Add padding to input image
+    if(len(input_image.shape) == 3):
+        image_padding = np.pad(input_image, 
+                               pad_width=((kernel_h // 2, kernel_h //2),
+                                          (kernel_w // 2, kernel_w // 2),
+                                          (0,0)
+                                ),
+                                mode='constant',
+                                constant_values=0
+                            ).astype(np.float32)
+    elif(len(input_image.shape)==2):
+        image_padding = np.pad(input_image, 
+                               pad_width=((kernel_h // 2, kernel_h //2),
+                                          (kernel_w // 2, kernel_w // 2)
+                                ),
+                                mode='constant',
+                                constant_values=0
+                            ).astype(np.float32)
+    
+    h = kernel_h // 2
+    w = kernel_w // 2
+
+    # Create empty numpy array to add convolutions to
+    image_convolution = np.zeros(image_padding.shape)
+
+    for i in range(h, image_padding.shape[0]-h):
+        for j in range(w, image_padding.shape[1]-w):
+            x = image_padding[i-h:i-h+kernel_h,
+                              j-w:j-w+kernel_w
+                              ]
+            x = x.flatten()*kernel.flatten()
+            image_convolution[i][j] = x.sum()
+    
+    h_end = -h
+    w_end = -w
+
+    if(h==0):
+        return image_convolution[h:,w:w_end]
+    if(w==0):
+        return image_convolution[h:h_end,w:]
+    
+    return image_convolution[h:h_end,w:w_end]
+    
