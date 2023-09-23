@@ -47,9 +47,9 @@ from pathlib import Path
 import matplotlib.image as mpimg
 import numpy as np
 
-# ========================================================#
-#           1. Import Images, and append to Array          #
-# ========================================================#
+# ======================================#
+# 1. Import Images, and append to Array #
+# ======================================#
 
 
  
@@ -67,9 +67,9 @@ for image in images:
 # print(image_array)
 
 
-# ========================================================#
-#      2. Create 1-dimensional Gaussian Filter Mask       #
-# ========================================================#
+# =============================================#
+# 2. Create 1-dimensional Gaussian Filter Mask #
+# =============================================#
 
 def gaussian_filter(standard_deviation):
 
@@ -97,9 +97,9 @@ def gaussian_filter(standard_deviation):
 print(f'Gaussian Filter: {gaussian_filter(1)}')
 
 
-# =============================================================================================#
-#      3. Create 1-dimensional  1st derivative Gaussian Filter Mask in X and Y direction       #
-# =============================================================================================#
+# ==================================================================================#
+# 3. Create 1-dimensional  1st derivative Gaussian Filter Mask in X and Y direction #
+# ==================================================================================#
 
 def gaussian_filter_partial_derivative_x(standard_deviation):
     # Create empty matrix in order to iterate through and use a Gaussian Function
@@ -150,9 +150,9 @@ def gaussian_filter_partial_derivative_y(standard_deviation):
 print(gaussian_filter_partial_derivative_y(1))
 
 
-# =============================================================================================#
-#      3. Convolve the Image with the Partial Derivative of the Gaussian Function              #
-# =============================================================================================#
+# ===============================#
+# 3. Create Convolution Function #
+# ===============================#
 
 def convolve(input_image, kernel):
 
@@ -169,20 +169,15 @@ def convolve(input_image, kernel):
     # Add padding to input image
     if(len(input_image.shape) == 3):
         image_padding = np.pad(input_image, 
-                               pad_width=((kernel_h // 2, kernel_h //2),
-                                          (kernel_w // 2, kernel_w // 2),
-                                          (0,0)
-                                ),
-                                mode='constant',
-                                constant_values=0
+                               pad_width=((kernel_h // 2, kernel_h // 2),
+                               (kernel_w // 2, kernel_w // 2),(0,0)), mode='constant', 
+                               constant_values=0
                             ).astype(np.float32)
-    elif(len(input_image.shape)==2):
+    elif(len(input_image.shape) == 2):
         image_padding = np.pad(input_image, 
-                               pad_width=((kernel_h // 2, kernel_h //2),
-                                          (kernel_w // 2, kernel_w // 2)
-                                ),
-                                mode='constant',
-                                constant_values=0
+                               pad_width=((kernel_h // 2, kernel_h // 2),(kernel_w // 2, kernel_w // 2)), 
+                               mode='constant', 
+                               constant_values=0
                             ).astype(np.float32)
     
     h = kernel_h // 2
@@ -209,3 +204,9 @@ def convolve(input_image, kernel):
     
     return image_convolution[h:h_end,w:w_end]
     
+
+# ===========================================================================#
+# 4. Convolve the Image with the Partial Derivative of the Gaussian Function #
+# ===========================================================================#
+
+
