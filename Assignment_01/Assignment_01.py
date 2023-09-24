@@ -49,7 +49,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 import cv2
-from scipy.misc import imread
+
 
 # ======================================#
 # 1. Import Images, and append to Array #
@@ -67,7 +67,7 @@ from scipy.misc import imread
 def gaussian_filter(standard_deviation):
 
     # Create empty matrix in order to iterate through and use a Gaussian Function
-    x_filter_size = 1
+    x_filter_size = 2 * int(4 * standard_deviation + 0.5) + 1
     y_filter_size = 2 * int(4 * standard_deviation + 0.5) + 1
     gaussian_mask = np.zeros((x_filter_size, y_filter_size), np.float32)
 
@@ -87,7 +87,7 @@ def gaussian_filter(standard_deviation):
 
 
 
-print(f'Gaussian Filter: {gaussian_filter(1)}')
+# print(f'Gaussian Filter: {gaussian_filter(1)}')
 
 
 # ==================================================================================#
@@ -96,7 +96,7 @@ print(f'Gaussian Filter: {gaussian_filter(1)}')
 
 def gaussian_filter_partial_derivative_x(standard_deviation):
     # Create empty matrix in order to iterate through and use a Gaussian Function
-    x_filter_size = 1
+    x_filter_size = 2 * int(4 * standard_deviation + 0.5) + 1
     y_filter_size = 2 * int(4 * standard_deviation + 0.5) + 1
     gaussian_derivative_mask_x = np.zeros((x_filter_size, y_filter_size), np.float32)
 
@@ -121,7 +121,7 @@ def gaussian_filter_partial_derivative_x(standard_deviation):
 
 def gaussian_filter_partial_derivative_y(standard_deviation):
     # Create empty matrix in order to iterate through and use a Gaussian Function
-    x_filter_size = 1
+    x_filter_size = 2 * int(4 * standard_deviation + 0.5) + 1
     y_filter_size = 2 * int(4 * standard_deviation + 0.5) + 1
     gaussian_derivative_mask_y = np.zeros((x_filter_size, y_filter_size), np.float32)
 
@@ -147,48 +147,47 @@ def gaussian_filter_partial_derivative_y(standard_deviation):
 # 3. Create Convolution Function #
 # ===============================#
 
-def convolve2D(image, kernel, padding=0, strides=1):
-    # Cross Correlation
-    kernel = np.flipud(np.fliplr(kernel))
+def convolution(oldimage, kernel):
+    #image = Image.fromarray(image, 'RGB')
+    image_h = oldimage.shape[0]
+    image_w = oldimage.shape[1]
+    
+    
+    kernel_h = kernel.shape[0]
+    kernel_w = kernel.shape[1]
+    
+    if(len(oldimage.shape) == 3):
+        image_pad = np.pad(oldimage, pad_width=((kernel_h // 2, kernel_h // 2),(kernel_w // 2, kernel_w // 2),(0,0)), mode='constant', constant_values=0).astype(np.float32)
+    elif(len(oldimage.shape) == 2):
+        image_pad = np.pad(oldimage, pad_width=((kernel_h // 2, kernel_h // 2),(kernel_w // 2, kernel_w // 2)), mode='constant', constant_values=0).astype(np.float32)
+    
+    
+    h = kernel_h // 2
+    w = kernel_w // 2
+    
+    image_conv = np.zeros(image_pad.shape)
+    
+    for i in range(h, image_pad.shape[0]-h):
+        for j in range(w, image_pad.shape[1]-w):
+            #sum = 0
+            x = image_pad[i-h:i-h+kernel_h, j-w:j-w+kernel_w]
+            x = x.flatten()*kernel.flatten()
+            
+            
+#             for m in range(kernel_h):
+#                 for n in range(kernel_w):
+#                     sum += kernel[m][n] * image_pad[i-h+m][j-w+n]
+            
+            image_conv[i][j] = x.sum()
+    h_end = -h
+    w_end = -w
+    
+    if(h == 0):
+        return image_conv[h:,w:w_end]
+    if(w == 0):
+        return image_conv[h:h_end,w:]
 
-    # Gather Shapes of Kernel + Image + Padding
-    xKernShape = kernel.shape[0]
-    yKernShape = kernel.shape[1]
-    xImgShape = image.shape[0]
-    yImgShape = image.shape[1]
-
-    # Shape of Output Convolution
-    xOutput = int(((xImgShape - xKernShape + 2 * padding) / strides) + 1)
-    yOutput = int(((yImgShape - yKernShape + 2 * padding) / strides) + 1)
-    output = np.zeros((xOutput, yOutput))
-
-    # Apply Equal Padding to All Sides
-    if padding != 0:
-        imagePadded = np.zeros((image.shape[0] + padding*2, image.shape[1] + padding*2))
-        imagePadded[int(padding):int(-1 * padding), int(padding):int(-1 * padding)] = image
-        print(imagePadded)
-    else:
-        imagePadded = image
-
-    # Iterate through image
-    for y in range(image.shape[1]):
-        # Exit Convolution
-        if y > image.shape[1] - yKernShape:
-            break
-        # Only Convolve if y has gone down by the specified Strides
-        if y % strides == 0:
-            for x in range(image.shape[0]):
-                # Go to next row once kernel is out of bounds
-                if x > image.shape[0] - xKernShape:
-                    break
-                try:
-                    # Only Convolve if x has moved by the specified Strides
-                    if x % strides == 0:
-                        output[x, y] = (kernel * imagePadded[x: x + xKernShape, y: y + yKernShape]).sum()
-                except:
-                    break
-
-    return output
+    return image_conv[h:h_end,w:w_end]
     
 
 # ===========================================================================#
@@ -201,17 +200,20 @@ folder_dir = 'Assignment_01/Images'
 # iterate over files in that directory and add to array
 
 image_array = []
+blurred_images = []
 images = Path(folder_dir).glob('*.jpg')
 for image in images:
-    print(image)
-    im =Image.open(image)
-    im =np.asarray(im)
-    print(im)
-    a=convolve2D(im,gaussian_filter(2),padding=1)
-    cv2.imshow('Blurred Image',a)
-    cv2.waitKey(0)
+    im = Image.open(image)
+    im = np.asarray(im)
+    im_filtered = np.zeros_like(im, dtype=np.float32)
+    for c in range(3):
+        im_filtered[:, :, c] = convolution(im[:, :, c], gaussian_filter(4))
+    print(im_filtered.astype(np.uint8))
 
-    
+
+
+
+
 
 
 
