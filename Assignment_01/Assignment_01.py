@@ -202,13 +202,18 @@ folder_dir = 'Assignment_01/Images'
 image_array = []
 blurred_images = []
 images = Path(folder_dir).glob('*.jpg')
+index = 0
 for image in images:
+    index += 1
     im = Image.open(image)
     im = np.asarray(im)
     im_filtered = np.zeros_like(im, dtype=np.float32)
     for c in range(3):
         im_filtered[:, :, c] = convolution(im[:, :, c], gaussian_filter(4))
-    print(im_filtered.astype(np.uint8))
+    plt.imsave(f"Assignment_01/blurred_images/{index}_blurred.jpg",im_filtered.astype(np.uint8))
+
+
+    
 
 
 
