@@ -42,21 +42,17 @@ Assignment Details:
 
 """
 
-# import required modules
+# ==================#
+# 1. Import Modules #
+# ==================#
+
+
 from pathlib import Path
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
 import cv2
-
-
-# ======================================#
-# 1. Import Images, and append to Array #
-# ======================================#
-
-
- 
 
 
 
@@ -72,7 +68,7 @@ def gaussian_filter(standard_deviation):
     gaussian_mask = np.zeros((x_filter_size, y_filter_size), np.float32)
 
     # Iterate through the empty matrix to create a gaussian mask
-    m = x_filter_size // 2
+    m = 1
     n = y_filter_size // 2
 
     for x in range(-m,m+1):
@@ -101,7 +97,7 @@ def gaussian_filter_partial_derivative_x(standard_deviation):
     gaussian_derivative_mask_x = np.zeros((x_filter_size, y_filter_size), np.float32)
 
     # Iterate through the empty matrix to create a gaussian mask
-    m = x_filter_size // 2
+    m = 1
     n = y_filter_size // 2
 
     for x in range(-m,m+1):
@@ -126,8 +122,8 @@ def gaussian_filter_partial_derivative_y(standard_deviation):
     gaussian_derivative_mask_y = np.zeros((x_filter_size, y_filter_size), np.float32)
 
     # Iterate through the empty matrix to create a gaussian mask
-    m = x_filter_size // 2
-    n = y_filter_size // 2
+    m = y_filter_size // 2
+    n = 1
 
     for x in range(-m,m+1):
         for y in range(-n, n+1):
@@ -209,7 +205,7 @@ for image in images:
     im = np.asarray(im)
     im_filtered = np.zeros_like(im, dtype=np.float32)
     for c in range(3):
-        im_filtered[:, :, c] = convolution(im[:, :, c], gaussian_filter(4))
+        im_filtered[:, :, c] = convolution(im[:, :, c], gaussian_filter_partial_derivative_y(2))
     plt.imsave(f"Assignment_01/blurred_images/{index}_blurred.jpg",im_filtered.astype(np.uint8))
 
 
