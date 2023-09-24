@@ -68,7 +68,7 @@ def gaussian_filter(standard_deviation):
     gaussian_mask = np.zeros((x_filter_size, y_filter_size), np.float32)
 
     # Iterate through the empty matrix to create a gaussian mask
-    m = 1
+    m = x_filter_size // 2
     n = y_filter_size // 2
 
     for x in range(-m,m+1):
@@ -97,7 +97,7 @@ def gaussian_filter_partial_derivative_x(standard_deviation):
     gaussian_derivative_mask_x = np.zeros((x_filter_size, y_filter_size), np.float32)
 
     # Iterate through the empty matrix to create a gaussian mask
-    m = 1
+    m = x_filter_size // 2
     n = y_filter_size // 2
 
     for x in range(-m,m+1):
@@ -122,8 +122,8 @@ def gaussian_filter_partial_derivative_y(standard_deviation):
     gaussian_derivative_mask_y = np.zeros((x_filter_size, y_filter_size), np.float32)
 
     # Iterate through the empty matrix to create a gaussian mask
-    m = y_filter_size // 2
-    n = 1
+    m = x_filter_size // 2
+    n = y_filter_size // 2
 
     for x in range(-m,m+1):
         for y in range(-n, n+1):
@@ -206,15 +206,29 @@ for image in images:
     im_filtered = np.zeros_like(im, dtype=np.float32)
     for c in range(3):
         im_filtered[:, :, c] = convolution(im[:, :, c], gaussian_filter_partial_derivative_y(2))
+    
+    # Save the images into the folder:
     plt.imsave(f"Assignment_01/blurred_images/{index}_blurred.jpg",im_filtered.astype(np.uint8))
 
 
     
+# =======================================================================================#
+# 5. Compute the magnitude of the Edge Response by Combining X and Y Partial Derivatives #
+# =======================================================================================#
 
+def edge_response_magnitude(partial_derivative_x, partial_derivative_y):
+    a = partial_derivative_x
+    b = partial_derivative_y
+    magnitude = (a**2 + b**2)**.5
 
+    return magnitude
 
+magnitude = edge_response_magnitude(
+    gaussian_filter_partial_derivative_x(2),
+    gaussian_filter_partial_derivative_y(2)
+)
 
-
+print(f"Magnitude of Edge Response: {magnitude}")
 
 
 
