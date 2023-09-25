@@ -371,5 +371,46 @@ Uses a high and low threshold value to suppress the detection of false edges.
 
 """
 
+def threshold(self, img):
 
+    highThreshold = img.max() * self.highThreshold;
+    lowThreshold = highThreshold * self.lowThreshold;
+
+    M, N = img.shape
+    res = np.zeros((M,N), dtype=np.int32)
+
+    weak = np.int32(self.weak_pixel)
+    strong = np.int32(self.strong_pixel)
+
+    strong_i, strong_j = np.where(img >= highThreshold)
+    zeros_i, zeros_j = np.where(img < lowThreshold)
+
+    weak_i, weak_j = np.where((img <= highThreshold) & (img >= lowThreshold))
+
+    res[strong_i, strong_j] = strong
+    res[weak_i, weak_j] = weak
+
+    return (res)
+
+
+def hysteresis(img):
+
+    M, N = img.shape
+    weak = self.weak_pixel
+    strong = self.strong_pixel
+
+    for i in range(1, M-1):
+        for j in range(1, N-1):
+            if (img[i,j] == weak):
+                try:
+                    if ((img[i+1, j-1] == strong) or (img[i+1, j] == strong) or (img[i+1, j+1] == strong)
+                        or (img[i, j-1] == strong) or (img[i, j+1] == strong)
+                        or (img[i-1, j-1] == strong) or (img[i-1, j] == strong) or (img[i-1, j+1] == strong)):
+                            img[i, j] = strong
+                    else:
+                            img[i, j] = 0
+                except IndexError as e:
+                        pass
+
+    return img
 
