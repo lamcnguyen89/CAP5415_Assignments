@@ -119,7 +119,7 @@ for image in images:
     im_blurred = convolution(im, gaussian_filter(2))
 
     # Save the images into the folder:
-    plt.imsave(f"Assignment_01/Blurred_Images/{index}_blurred.jpg",
+    plt.imsave(f"Assignment_01/Output_Images/01_Gaussian_Blur/{index}_blurred.jpg",
                im_blurred.astype(np.uint8),
                cmap=plt.cm.Greys_r
             )
@@ -191,11 +191,11 @@ for image in images:
         im_filtered_y = convolution(im, gaussian_filter_partial_derivative_y(2))
         im_filtered_x = convolution(im, gaussian_filter_partial_derivative_x(2))
     # Save the images into the folder:
-    plt.imsave(f"Assignment_01/Edged_Images_y/{index}_edged_y.jpg",
+    plt.imsave(f"Assignment_01/Output_Images/03_Gradient_Edge_Detection_Y/{index}_edged_y.jpg",
                im_filtered_y.astype(np.uint8),
                cmap=plt.cm.Greys_r
             )
-    plt.imsave(f"Assignment_01/Edged_Images_x/{index}_edged_x.jpg",
+    plt.imsave(f"Assignment_01/Output_Images/03_Gradient_Edge_Detection_X/{index}_edged_x.jpg",
                im_filtered_x.astype(np.uint8),
                cmap=plt.cm.Greys_r
             )
@@ -234,11 +234,11 @@ index = 0
 for im in images:
      index += 1
      magnitude,orientation = imageMagnitudeandOrientation(im,4)
-     plt.imsave(f"Assignment_01/Magnitude_Images/{index}_magnitude.png",
+     plt.imsave(f"Assignment_01/Output_Images/04_Magnitude/{index}_magnitude.png",
                 magnitude.astype(np.uint8),
                 cmap=plt.cm.Greys_r
             )
-     plt.imsave(f"Assignment_01/Orientation_Images/{index}_orientation.png",
+     plt.imsave(f"Assignment_01/Output_Images/05_Orientation/{index}_orientation.png",
                 orientation.astype(np.uint8),
                 cmap=plt.cm.Greys_r
             )
@@ -247,7 +247,7 @@ for im in images:
 
 # Magnitude and Orientation using Sobel Filter
 
-def sobelImage(images):
+def sobelFilter(images):
      
      image = Image.open(images).convert("L")
      image = np.asarray(image)
@@ -272,12 +272,12 @@ index = 0
 
 for im in images:
      index += 1
-     magnitude,orientation = sobelImage(im)
-     plt.imsave(f"Assignment_01/Magnitude_Sobel_Images/{index}_magnitude_sobel.png",
+     magnitude,orientation = sobelFilter(im)
+     plt.imsave(f"Assignment_01/Output_Images/06_Magnitude_Sobel/{index}_magnitude_sobel.png",
                 magnitude.astype(np.uint8),
                 cmap=plt.cm.Greys_r
             )
-     plt.imsave(f"Assignment_01/Orientation_Sobel_Images/{index}_orientation_sobel.png",
+     plt.imsave(f"Assignment_01/Output_Images/07_Orientation_Sobel/{index}_orientation_sobel.png",
                 orientation.astype(np.uint8),
                 cmap=plt.cm.Greys_r
             )
@@ -352,10 +352,10 @@ index = 0
 for im in images:
      index += 1
      im_non_max_suppression = non_max_suppression(im,4)
-     plt.imsave(f"Assignment_01/Non_Max_Suppression_Images/{index}_NMS.png",
+     plt.imsave(f"Assignment_01/Output_Images/08_Non_Max_Suppression/{index}_NMS.png",
                 im_non_max_suppression.astype(np.uint8),
                 cmap=plt.cm.Greys_r
-                )
+            )
 
 
 
@@ -439,7 +439,7 @@ for im in images:
                                 weak_pixel=25,
                                 strong_pixel=255
                             )
-     plt.imsave(f"Assignment_01/Hysteresis_Images/{index}_Hysteresis.png",
+     plt.imsave(f"Assignment_01/Output_Images/09_Hysteresis/{index}_Hysteresis.png",
                 im_hysteresis.astype(np.uint8),
                 cmap=plt.cm.Greys_r
             )
