@@ -123,22 +123,21 @@ def gaussian_filter(standard_deviation):
 
 
 
-# # Apply Gaussian Filter to Images
-# input_folder = 'Assignment_01/Images'
-# images = Path(input_folder).glob('*.jpg')
-# index = 0
-# for image in images:
-#     index += 1
-#     im = Image.open(image)
-#     im = np.asarray(im)
-#     im_blurred = np.zeros_like(im, dtype=np.float32)
-#     im_filtered_y = np.zeros_like(im, dtype=np.float32)
-#     im_filtered_x = np.zeros_like(im, dtype=np.float32)
-#     for c in range(3):
-#         im_blurred[:, :, c] = convolution(im[:, :, c], gaussian_filter(2))
+# Apply Gaussian Filter to Images
+input_folder = 'Assignment_01/Images'
+images = Path(input_folder).glob('*.jpg')
+index = 0
+for image in images:
+    index += 1
+    im = Image.open(image).convert("L")
+    im = np.asarray(im)
+    im_blurred = np.zeros_like(im, dtype=np.float32)
+    im_filtered_y = np.zeros_like(im, dtype=np.float32)
+    im_filtered_x = np.zeros_like(im, dtype=np.float32)
+    im_blurred = convolution(im, gaussian_filter(2))
 
-#     # Save the images into the folder:
-#     plt.imsave(f"Assignment_01/Blurred_Images/{index}_blurred.jpg",im_blurred.astype(np.uint8))
+    # Save the images into the folder:
+    plt.imsave(f"Assignment_01/Blurred_Images/{index}_blurred.jpg",im_blurred.astype(np.uint8),cmap=plt.cm.Greys_r)
 
 
 
@@ -193,22 +192,22 @@ def gaussian_filter_partial_derivative_y(standard_deviation):
 # 4. Convolve the Image with the Partial Derivatives of the Gaussian Function #
 # ===========================================================================#
 
-# # Get images and apply partial derivatives of the gaussian function and save to output folder
-# input_folder = 'Assignment_01/Images'
-# images = Path(input_folder).glob('*.jpg')
-# index = 0
-# for image in images:
-#     index += 1
-#     im = Image.open(image)
-#     im = np.asarray(im)
-#     im_filtered_y = np.zeros_like(im, dtype=np.float32)
-#     im_filtered_x = np.zeros_like(im, dtype=np.float32)
-#     for c in range(3):
-#         im_filtered_y[:, :, c] = convolution(im[:, :, c], gaussian_filter_partial_derivative_y(2))
-#         im_filtered_x[:, :, c] = convolution(im[:, :, c], gaussian_filter_partial_derivative_x(2))
-#     # Save the images into the folder:
-#     plt.imsave(f"Assignment_01/Edged_Images_y/{index}_edged_y.jpg",im_filtered_y.astype(np.uint8))
-#     plt.imsave(f"Assignment_01/Edged_Images_x/{index}_edged_x.jpg",im_filtered_x.astype(np.uint8))
+# Get images and apply partial derivatives of the gaussian function and save to output folder
+input_folder = 'Assignment_01/Images'
+images = Path(input_folder).glob('*.jpg')
+index = 0
+for image in images:
+    index += 1
+    im = Image.open(image).convert("L")
+    im = np.asarray(im)
+    im_filtered_y = np.zeros_like(im, dtype=np.float32)
+    im_filtered_x = np.zeros_like(im, dtype=np.float32)
+    for c in range(3):
+        im_filtered_y = convolution(im, gaussian_filter_partial_derivative_y(2))
+        im_filtered_x = convolution(im, gaussian_filter_partial_derivative_x(2))
+    # Save the images into the folder:
+    plt.imsave(f"Assignment_01/Edged_Images_y/{index}_edged_y.jpg",im_filtered_y.astype(np.uint8),cmap=plt.cm.Greys_r)
+    plt.imsave(f"Assignment_01/Edged_Images_x/{index}_edged_x.jpg",im_filtered_x.astype(np.uint8),cmap=plt.cm.Greys_r)
 
 
 
@@ -218,7 +217,7 @@ def gaussian_filter_partial_derivative_y(standard_deviation):
 # =======================================================================================#
 
 def imageMagnitudeandOrientation(image,standard_deviation):
-      image = Image.open(image)
+      image = Image.open(image).convert("L")
       image = np.asarray(image)
       
       im_filtered_x = np.zeros_like(image, dtype=np.float32)
@@ -227,9 +226,9 @@ def imageMagnitudeandOrientation(image,standard_deviation):
       x_filter = gaussian_filter_partial_derivative_x(standard_deviation)
       y_filter = gaussian_filter_partial_derivative_y(standard_deviation)
 
-      for c in range(3):
-         im_filtered_y[:, :, c] = convolution(image[:, :, c], y_filter)
-         im_filtered_x[:, :, c] = convolution(image[:, :, c], x_filter)
+    
+      im_filtered_y = convolution(image, y_filter)
+      im_filtered_x = convolution(image, x_filter)
 
       magnitude = 20*np.sqrt(im_filtered_x**2 + im_filtered_y**2)
       orientation = np.arctan(im_filtered_y,im_filtered_x)
@@ -241,11 +240,11 @@ input_folder = 'Assignment_01/Images'
 images = Path(input_folder).glob('*.jpg')
 index = 0
 
-# for im in images:
-#      index += 1
-#      magnitude,orientation = imageMagnitudeandOrientation(im,4)
-#      plt.imsave(f"Assignment_01/Magnitude_Images/{index}_magnitude.png",magnitude.astype(np.uint8))
-#      plt.imsave(f"Assignment_01/Orientation_Images/{index}_orientation.png",orientation.astype(np.uint8))
+for im in images:
+     index += 1
+     magnitude,orientation = imageMagnitudeandOrientation(im,4)
+     plt.imsave(f"Assignment_01/Magnitude_Images/{index}_magnitude.png",magnitude.astype(np.uint8),cmap=plt.cm.Greys_r)
+     plt.imsave(f"Assignment_01/Orientation_Images/{index}_orientation.png",orientation.astype(np.uint8),cmap=plt.cm.Greys_r)
      
 
 
@@ -253,7 +252,7 @@ index = 0
 
 def sobelImage(images):
      
-     image = Image.open(images)
+     image = Image.open(images).convert("L")
      image = np.asarray(image)
 
      sobelFilterX = np.array([[-1,-2,-1],[0,0,0],[1,2,1]])
@@ -262,9 +261,8 @@ def sobelImage(images):
      im_filtered_y = np.zeros_like(image, dtype=np.float32)
      im_filtered_x = np.zeros_like(image, dtype=np.float32)
 
-     for c in range(3):
-         im_filtered_y[:, :, c] = convolution(image[:, :, c], sobelFilterY)
-         im_filtered_x[:, :, c] = convolution(image[:, :, c], sobelFilterX)
+     im_filtered_y = convolution(image, sobelFilterY)
+     im_filtered_x = convolution(image, sobelFilterX)
 
      magnitude = np.sqrt(im_filtered_x**2 + im_filtered_y**2)
      orientation = np.arctan(im_filtered_y,im_filtered_x)
@@ -275,11 +273,11 @@ input_folder = 'Assignment_01/Images'
 images = Path(input_folder).glob('*.jpg')
 index = 0
 
-# for im in images:
-#      index += 1
-#      magnitude,orientation = sobelImage(im)
-#      plt.imsave(f"Assignment_01/Magnitude_Sobel_Images/{index}_magnitude_sobel.png",magnitude.astype(np.uint8))
-#      plt.imsave(f"Assignment_01/Orientation_Sobel_Images/{index}_orientation_sobel.png",orientation.astype(np.uint8))
+for im in images:
+     index += 1
+     magnitude,orientation = sobelImage(im)
+     plt.imsave(f"Assignment_01/Magnitude_Sobel_Images/{index}_magnitude_sobel.png",magnitude.astype(np.uint8),cmap=plt.cm.Greys_r)
+     plt.imsave(f"Assignment_01/Orientation_Sobel_Images/{index}_orientation_sobel.png",orientation.astype(np.uint8),cmap=plt.cm.Greys_r)
      
      
 
@@ -300,9 +298,6 @@ def non_max_suppression(image,standard_deviation):
         # For Non-Max Suppression, we need the Magnitude of the Image and it's Orientation:
 
         img_magnitude,img_orientation = imageMagnitudeandOrientation(image,standard_deviation)
-
-        img_magnitude =img_magnitude[:,:,0]
-        img_orientation=img_orientation[:,:,0]
 
         M,N = img_magnitude.shape
 
@@ -347,9 +342,6 @@ def non_max_suppression(image,standard_deviation):
 
     
 # Apply to the Images
-
-
-
 input_folder = 'Assignment_01/Images'
 images = Path(input_folder).glob('*.jpg')
 index = 0
@@ -357,7 +349,7 @@ index = 0
 for im in images:
      index += 1
      im_non_max_suppression = non_max_suppression(im,4)
-     plt.imsave(f"Assignment_01/Non_Max_Suppression_Images/{index}_NMS.png",im_non_max_suppression.astype(np.uint8))
+     plt.imsave(f"Assignment_01/Non_Max_Suppression_Images/{index}_NMS.png",im_non_max_suppression.astype(np.uint8),cmap=plt.cm.Greys_r)
 
 
 
