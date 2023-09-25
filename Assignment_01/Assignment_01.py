@@ -8,37 +8,19 @@ Subject: Canny Edge Detection Implementation [5 pts]
 
 Tasks:
     1. Choose three example gray-scale images from Berkeley Segmentation Dataset (Training Images). When executed, your algorithm should plot intermediate and final results of Canny Edge Detection process as similar to the figure illustrated above.
+        # Image Source: https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/BSDS300/html/dataset/images.html
 
     2. Please show the effect of threshold(sigma) in edge detection by choosing three different threshold(sigma) values when smoothing. Note that you need to indicate which threshold works best as a comment in your assignment.
 
 
-Theory: 
+Assignment Details: 
 
-    1. Noise Reduction
-    2. Gradient Calculation
-    3. Non-maximum suppression
-    4. Double threshold
-    Edge Tracking by Hysteresis
-
-
-Assignment Details:
-
-# 1. Read a grey scale image that can be found from the Berkeley Segmentation Dataset, Training Images, and store it as a matric named I
-        # Link: https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/BSDS300/html/dataset/images.html
-
-# Source: https://towardsdatascience.com/canny-edge-detection-step-by-step-in-python-computer-vision-b49c3a2d8123
-
-# 2. Noise Reduction: Create a one-dimensional Gaussian mask G to convolve with I. The standard Deviation(s) of this Gaussian is a parameter to the edge detector (call it std > 0)
-
-# 3. Gradient: Create a one-dimensional mask for the first derivative of the Gaussian in the x and y directions; call these G_x and G_y. The same std > 0 value is used as in step 2
-
-# 4. Convolve I_x with G_x to give I'_x, the x component of I convolved with the derivative of the Gaussian, and convolve I_y with G_y  to give the I'_y component of I convolved with the derivative of the Gaussian
-
-# 5. Compute the magnitude of the edge response by combining the x and y components. The magnitude of the result can be computed at each pixel (x,y) as M(x,y) = (I'_y**.5 + I'x**.5)**.5
-
-# 6. Implement the non-maximimum suppression algorithm that we discussed in the lecture. Pixels that are not local maxima should be removed with this method. In other words, not all the pixels indicating strong magnitude are edges in fact We need to remove false positive edge locations from the image.
-
-# 7. Apply Hysteresis thresholding to obtain the final edge-map. You may use any existing library function to compute connected components.
+    1. Implement Noise Reduction using the Gaussian Blur Filter
+    2. Implement a Gradient Filter Using the Derivative of the Gaussian Blur Filter
+    3. Calculate the Magnitude and Orientation of the Images which have been blurred and had the Gradient Filter Applied
+    4. Implement a Non-maximum suppression Filter using the Magnitude and Orientation of the Images
+    5. Implement the Double threshold Algorithm
+    6. Implement Edge Tracking by Hysteresis 
 
 """
 
@@ -137,7 +119,10 @@ for image in images:
     im_blurred = convolution(im, gaussian_filter(2))
 
     # Save the images into the folder:
-    plt.imsave(f"Assignment_01/Blurred_Images/{index}_blurred.jpg",im_blurred.astype(np.uint8),cmap=plt.cm.Greys_r)
+    plt.imsave(f"Assignment_01/Blurred_Images/{index}_blurred.jpg",
+               im_blurred.astype(np.uint8),
+               cmap=plt.cm.Greys_r
+            )
 
 
 
@@ -206,8 +191,14 @@ for image in images:
         im_filtered_y = convolution(im, gaussian_filter_partial_derivative_y(2))
         im_filtered_x = convolution(im, gaussian_filter_partial_derivative_x(2))
     # Save the images into the folder:
-    plt.imsave(f"Assignment_01/Edged_Images_y/{index}_edged_y.jpg",im_filtered_y.astype(np.uint8),cmap=plt.cm.Greys_r)
-    plt.imsave(f"Assignment_01/Edged_Images_x/{index}_edged_x.jpg",im_filtered_x.astype(np.uint8),cmap=plt.cm.Greys_r)
+    plt.imsave(f"Assignment_01/Edged_Images_y/{index}_edged_y.jpg",
+               im_filtered_y.astype(np.uint8),
+               cmap=plt.cm.Greys_r
+            )
+    plt.imsave(f"Assignment_01/Edged_Images_x/{index}_edged_x.jpg",
+               im_filtered_x.astype(np.uint8),
+               cmap=plt.cm.Greys_r
+            )
 
 
 
@@ -234,7 +225,7 @@ def imageMagnitudeandOrientation(image,standard_deviation):
       orientation = np.arctan(im_filtered_y,im_filtered_x)
 
       
-      return (magnitude.astype(np.uint8),orientation.astype(np.uint8))
+      return (magnitude,orientation)
 
 input_folder = 'Assignment_01/Images'
 images = Path(input_folder).glob('*.jpg')
@@ -243,8 +234,14 @@ index = 0
 for im in images:
      index += 1
      magnitude,orientation = imageMagnitudeandOrientation(im,4)
-     plt.imsave(f"Assignment_01/Magnitude_Images/{index}_magnitude.png",magnitude.astype(np.uint8),cmap=plt.cm.Greys_r)
-     plt.imsave(f"Assignment_01/Orientation_Images/{index}_orientation.png",orientation.astype(np.uint8),cmap=plt.cm.Greys_r)
+     plt.imsave(f"Assignment_01/Magnitude_Images/{index}_magnitude.png",
+                magnitude.astype(np.uint8),
+                cmap=plt.cm.Greys_r
+            )
+     plt.imsave(f"Assignment_01/Orientation_Images/{index}_orientation.png",
+                orientation.astype(np.uint8),
+                cmap=plt.cm.Greys_r
+            )
      
 
 
@@ -267,7 +264,7 @@ def sobelImage(images):
      magnitude = np.sqrt(im_filtered_x**2 + im_filtered_y**2)
      orientation = np.arctan(im_filtered_y,im_filtered_x)
 
-     return(magnitude.astype(np.uint8), orientation.astype(np.uint8))
+     return(magnitude, orientation)
 
 input_folder = 'Assignment_01/Images'
 images = Path(input_folder).glob('*.jpg')
@@ -276,8 +273,14 @@ index = 0
 for im in images:
      index += 1
      magnitude,orientation = sobelImage(im)
-     plt.imsave(f"Assignment_01/Magnitude_Sobel_Images/{index}_magnitude_sobel.png",magnitude.astype(np.uint8),cmap=plt.cm.Greys_r)
-     plt.imsave(f"Assignment_01/Orientation_Sobel_Images/{index}_orientation_sobel.png",orientation.astype(np.uint8),cmap=plt.cm.Greys_r)
+     plt.imsave(f"Assignment_01/Magnitude_Sobel_Images/{index}_magnitude_sobel.png",
+                magnitude.astype(np.uint8),
+                cmap=plt.cm.Greys_r
+            )
+     plt.imsave(f"Assignment_01/Orientation_Sobel_Images/{index}_orientation_sobel.png",
+                orientation.astype(np.uint8),
+                cmap=plt.cm.Greys_r
+            )
      
      
 
@@ -299,15 +302,15 @@ def non_max_suppression(image,standard_deviation):
 
         img_magnitude,img_orientation = imageMagnitudeandOrientation(image,standard_deviation)
 
-        M,N = img_magnitude.shape
+        m,n = img_magnitude.shape
 
-        im_nms = np.zeros((M,N), dtype=np.float32)
+        im_nms = np.zeros((m,n), dtype=np.float32)
         angle = img_orientation * 180. / np.pi
         angle[angle < 0] += 180
 
 
-        for i in range(1,M-1):
-            for j in range(1,N-1):
+        for i in range(1,m-1):
+            for j in range(1,n-1):
                 try:
                     q = 255
                     r = 255
@@ -338,7 +341,7 @@ def non_max_suppression(image,standard_deviation):
                 except IndexError as e:
                     pass
 
-        return im_nms.astype(np.uint8)
+        return im_nms
 
     
 # Apply to the Images
@@ -349,7 +352,10 @@ index = 0
 for im in images:
      index += 1
      im_non_max_suppression = non_max_suppression(im,4)
-     plt.imsave(f"Assignment_01/Non_Max_Suppression_Images/{index}_NMS.png",im_non_max_suppression.astype(np.uint8),cmap=plt.cm.Greys_r)
+     plt.imsave(f"Assignment_01/Non_Max_Suppression_Images/{index}_NMS.png",
+                im_non_max_suppression.astype(np.uint8),
+                cmap=plt.cm.Greys_r
+                )
 
 
 
@@ -371,46 +377,69 @@ Uses a high and low threshold value to suppress the detection of false edges.
 
 """
 
-def threshold(self, img):
+def threshold(image, standard_deviation,low_threshold,high_threshold,weak_pixel,strong_pixel):
 
-    highThreshold = img.max() * self.highThreshold;
-    lowThreshold = highThreshold * self.lowThreshold;
+    non_max_suppression_image = non_max_suppression(image,standard_deviation)
 
-    M, N = img.shape
-    res = np.zeros((M,N), dtype=np.int32)
+    high_threshold = non_max_suppression_image.max() * high_threshold;
+    low_threshold = high_threshold * low_threshold;
 
-    weak = np.int32(self.weak_pixel)
-    strong = np.int32(self.strong_pixel)
+    m, n = non_max_suppression_image.shape
+    img_threshold = np.zeros((m,n), dtype=np.int32)
 
-    strong_i, strong_j = np.where(img >= highThreshold)
-    zeros_i, zeros_j = np.where(img < lowThreshold)
+    weak = np.int32(weak_pixel)
+    strong = np.int32(strong_pixel)
 
-    weak_i, weak_j = np.where((img <= highThreshold) & (img >= lowThreshold))
+    strong_i, strong_j = np.where(non_max_suppression_image >= high_threshold)
+    zeros_i, zeros_j = np.where(non_max_suppression_image < low_threshold)
 
-    res[strong_i, strong_j] = strong
-    res[weak_i, weak_j] = weak
+    weak_i, weak_j = np.where((non_max_suppression_image <= high_threshold) & (non_max_suppression_image >= low_threshold))
 
-    return (res)
+    img_threshold[strong_i, strong_j] = strong
+    img_threshold[weak_i, weak_j] = weak
+
+    return img_threshold
 
 
-def hysteresis(img):
 
-    M, N = img.shape
-    weak = self.weak_pixel
-    strong = self.strong_pixel
+def hysteresis(image, standard_deviation,low_threshold, high_threshold, weak_pixel,strong_pixel):
 
-    for i in range(1, M-1):
-        for j in range(1, N-1):
-            if (img[i,j] == weak):
+    hysteresis_img = threshold(image,standard_deviation,low_threshold,high_threshold,weak_pixel,strong_pixel)
+
+    m, n = hysteresis_img.shape
+    weak = weak_pixel
+    strong = strong_pixel
+
+    for i in range(1, m-1):
+        for j in range(1, n-1):
+            if (hysteresis_img[i,j] == weak):
                 try:
-                    if ((img[i+1, j-1] == strong) or (img[i+1, j] == strong) or (img[i+1, j+1] == strong)
-                        or (img[i, j-1] == strong) or (img[i, j+1] == strong)
-                        or (img[i-1, j-1] == strong) or (img[i-1, j] == strong) or (img[i-1, j+1] == strong)):
-                            img[i, j] = strong
+                    if ((hysteresis_img[i+1, j-1] == strong) or (hysteresis_img[i+1, j] == strong) or (hysteresis_img[i+1, j+1] == strong)
+                        or (hysteresis_img[i, j-1] == strong) or (hysteresis_img[i, j+1] == strong)
+                        or (hysteresis_img[i-1, j-1] == strong) or (hysteresis_img[i-1, j] == strong) or (hysteresis_img[i-1, j+1] == strong)):
+                            hysteresis_img[i, j] = strong
                     else:
-                            img[i, j] = 0
+                            hysteresis_img[i, j] = 0
                 except IndexError as e:
                         pass
 
-    return img
+    return hysteresis_img
 
+# Apply to the Images
+input_folder = 'Assignment_01/Images'
+images = Path(input_folder).glob('*.jpg')
+index = 0
+
+for im in images:
+     index += 1
+     im_hysteresis = hysteresis(image=im,
+                                standard_deviation=4,
+                                low_threshold=0.05,
+                                high_threshold=0.15,
+                                weak_pixel=25,
+                                strong_pixel=255
+                            )
+     plt.imsave(f"Assignment_01/Hysteresis_Images/{index}_Hysteresis.png",
+                im_hysteresis.astype(np.uint8),
+                cmap=plt.cm.Greys_r
+            )
