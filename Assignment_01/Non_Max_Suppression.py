@@ -29,7 +29,6 @@ def non_max_suppression(image,standard_deviation):
 
         for i in range(1,m-1):
             for j in range(1,n-1):
-                try:
                     q = 255
                     r = 255
 
@@ -55,9 +54,6 @@ def non_max_suppression(image,standard_deviation):
                     else:
                         im_nms[i,j] = 0
 
-
-                except IndexError as e:
-                    pass
 
         return im_nms
 

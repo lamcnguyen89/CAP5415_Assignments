@@ -2,8 +2,11 @@
 # 2. Create 1-dimensional Gaussian Filter Mask and Apply it #
 # ==========================================================#
 import numpy as np
+from PIL import Image
+import matplotlib.pyplot as plt
+from pathlib import Path
 
-def gaussian_filter(standard_deviation):
+def gaussian_filter_2D(standard_deviation):
     
    
     # Create empty matrix in order to iterate through and use a Gaussian Function
@@ -24,5 +27,33 @@ def gaussian_filter(standard_deviation):
             gaussian_mask[x+m, y+n] = a * b
     
     return gaussian_mask
+
+
+def X_gaussian_filter_1D(standard_deviation):
+    size=10
+    # Create an array of integers from -(size//2) to size//2
+    x = np.arange(-(size // 2), (size // 2) + 1)
+    # Compute the Gaussian function for each value in the array
+    a= (1 / (np.sqrt(2 * np.pi * standard_deviation**2)))
+    b= np.exp(-(x**2) / (2 * standard_deviation**2))
+    gaussian_mask = a*b
+    # Normalize the filter to ensure its sum equals 1
+    gaussian_mask /= np.sum(gaussian_mask)
+    return gaussian_mask
+
+
+def Y_gaussian_filter_1D(standard_deviation):
+    size=10
+    # Create an array of integers from -(size//2) to size//2
+    y = np.arange(-(size // 2), (size // 2) + 1)
+    y = np.vstack(y)
+    # Compute the Gaussian function for each value in the array
+    a= (1 / (np.sqrt(2 * np.pi * standard_deviation**2)))
+    b= np.exp(-(y**2) / (2 * standard_deviation**2))
+    gaussian_mask = a*b
+    # Normalize the filter to ensure its sum equals 1
+    gaussian_mask /= np.sum(gaussian_mask)
+    return gaussian_mask
+
 
 

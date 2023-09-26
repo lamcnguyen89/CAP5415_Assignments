@@ -36,13 +36,17 @@ from PIL import Image
 
 from Convolution import convolution
 
+standard_dev_1 = 2
+standard_dev_2 = 4
+standard_dev_3 = 6
+
 
 
 # ==========================================================#
 # 2. Create 1-dimensional Gaussian Filter Mask and Apply it #
 # ==========================================================#
 
-from Gaussian import gaussian_filter
+from Gaussian import X_gaussian_filter_1D,Y_gaussian_filter_1D
 
 input_folder = 'Assignment_01/Input_Images'
 images = Path(input_folder).glob('*.jpg')
@@ -57,7 +61,7 @@ for image in images:
     im_blurred = np.zeros_like(im, dtype=np.float32)
     im_filtered_y = np.zeros_like(im, dtype=np.float32)
     im_filtered_x = np.zeros_like(im, dtype=np.float32)
-    im_blurred = convolution(im, gaussian_filter(2))
+    im_blurred = convolution(im, Y_gaussian_filter_1D(standard_deviation=standard_dev_2))
 
     # Save the images into the folder:
     plt.imsave(f"Assignment_01/Output_Images/01_Gaussian_Blur/{index}_blurred.jpg",
@@ -71,8 +75,8 @@ for image in images:
 # 3. Create 1-dimensional Filter Mask in X and Y direction and apply them #
 # ========================================================================#
 
-from Gradient import gaussian_filter_partial_derivative_x
-from Gradient import gaussian_filter_partial_derivative_y
+from Gradient import gaussian_gradient_x_1D
+from Gradient import gaussian_gradient_y_1D
 
 input_folder = 'Assignment_01/Input_Images'
 images = Path(input_folder).glob('*.jpg')
@@ -86,8 +90,8 @@ for image in images:
     im = np.asarray(im)
     im_filtered_y = np.zeros_like(im, dtype=np.float32)
     im_filtered_x = np.zeros_like(im, dtype=np.float32)
-    im_filtered_y = convolution(im, gaussian_filter_partial_derivative_y(2))
-    im_filtered_x = convolution(im, gaussian_filter_partial_derivative_x(2))
+    im_filtered_y = convolution(im, gaussian_gradient_y_1D(standard_deviation=standard_dev_2))
+    im_filtered_x = convolution(im, gaussian_gradient_x_1D(standard_deviation=standard_dev_2))
 
     # Save the images into the folder:
     plt.imsave(f"Assignment_01/Output_Images/03_Gradient_Edge_Detection_Y/{index}_edged_y.jpg",
@@ -116,7 +120,7 @@ index = 0
 print("Applying Magnitude and Orientation Filters")
 for im in images:
      index += 1
-     magnitude,orientation = imageMagnitudeandOrientation(im,4)
+     magnitude,orientation = imageMagnitudeandOrientation(im,standard_deviation=standard_dev_2)
      plt.imsave(f"Assignment_01/Output_Images/04_Magnitude/{index}_magnitude.png",
                 magnitude.astype(np.uint8),
                 cmap=plt.cm.Greys_r
@@ -157,14 +161,15 @@ The result of applying this algorithm is that the edges will be thinner. This is
 from Non_Max_Suppression import non_max_suppression
 
 # Apply to the Images
-input_folder = 'Assignment_01/Images'
+input_folder = 'Assignment_01/Input_Images'
 images = Path(input_folder).glob('*.jpg')
 index = 0
 
-print("Applying Non-Maximum Suppression Filters")
+
 for im in images:
      index += 1
-     im_non_max_suppression = non_max_suppression(im,4)
+     print("Applying Non-Maximum Suppression Filters")
+     im_non_max_suppression = non_max_suppression(im,standard_deviation=standard_dev_2)
      plt.imsave(f"Assignment_01/Output_Images/08_Non_Max_Suppression/{index}_NMS.png",
                 im_non_max_suppression.astype(np.uint8),
                 cmap=plt.cm.Greys_r
@@ -199,7 +204,7 @@ print("Applying the last step of Canny Filter Detection: Hysteresis Thresholding
 for im in images:
      index += 1
      im_hysteresis = hysteresis(image=im,
-                                standard_deviation=4,
+                                standard_deviation=standard_dev_2,
                                 low_threshold=0.05,
                                 high_threshold=0.15,
                                 weak_pixel=25,

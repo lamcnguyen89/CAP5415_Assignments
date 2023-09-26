@@ -3,7 +3,7 @@
 # =======================================================================================#
 from PIL import Image
 import numpy as np
-from Gradient import gaussian_filter_partial_derivative_x,gaussian_filter_partial_derivative_y
+from Gradient import gaussian_gradient_x_1D,gaussian_gradient_y_1D
 from Convolution import convolution
 
 def imageMagnitudeandOrientation(image,standard_deviation):
@@ -14,8 +14,8 @@ def imageMagnitudeandOrientation(image,standard_deviation):
       im_filtered_x = np.zeros_like(image, dtype=np.float32)
       im_filtered_y = np.zeros_like(image, dtype=np.float32)
 
-      x_filter = gaussian_filter_partial_derivative_x(standard_deviation)
-      y_filter = gaussian_filter_partial_derivative_y(standard_deviation)
+      x_filter = gaussian_gradient_x_1D(standard_deviation)
+      y_filter = gaussian_gradient_y_1D(standard_deviation)
 
     
       im_filtered_y = convolution(image, y_filter)

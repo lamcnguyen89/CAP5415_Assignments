@@ -8,13 +8,17 @@ This is a key function for combining images with a filter. This function will be
 
 import numpy as np
 
-def convolution(oldimage, kernel):
-    image_h = oldimage.shape[0]
-    image_w = oldimage.shape[1]
+def convolution(oldimage, kernel):    
     
-    
-    kernel_h = kernel.shape[0]
-    kernel_w = kernel.shape[1]
+    try:
+        kernel_h = kernel.shape[0]
+    except:
+        kernel_h = 1
+
+    try:
+        kernel_w = kernel.shape[1]
+    except:
+        kernel_w = 1
     
     if(len(oldimage.shape) == 3):
         image_pad = np.pad(oldimage, pad_width=((kernel_h // 2, kernel_h // 2),(kernel_w // 2, kernel_w // 2),(0,0)), mode='constant', constant_values=0).astype(np.float32)
