@@ -30,6 +30,7 @@ def gaussian_filter_2D(standard_deviation):
 
 
 def X_gaussian_filter_1D(standard_deviation):
+    # Get the size of the filter
     size=10
     # Create an array of integers from -(size//2) to size//2
     x = np.arange(-(size // 2), (size // 2) + 1)
@@ -43,6 +44,7 @@ def X_gaussian_filter_1D(standard_deviation):
 
 
 def Y_gaussian_filter_1D(standard_deviation):
+    # Get the size of the filter
     size=10
     # Create an array of integers from -(size//2) to size//2
     y = np.arange(-(size // 2), (size // 2) + 1)

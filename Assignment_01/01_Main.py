@@ -165,10 +165,9 @@ input_folder = 'Assignment_01/Input_Images'
 images = Path(input_folder).glob('*.jpg')
 index = 0
 
-
+print("Applying Non-Maximum Suppression Filters")
 for im in images:
      index += 1
-     print("Applying Non-Maximum Suppression Filters")
      im_non_max_suppression = non_max_suppression(im,standard_deviation=standard_dev_2)
      plt.imsave(f"Assignment_01/Output_Images/08_Non_Max_Suppression/{index}_NMS.png",
                 im_non_max_suppression.astype(np.uint8),

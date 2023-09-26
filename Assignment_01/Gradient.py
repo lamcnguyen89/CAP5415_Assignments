@@ -80,5 +80,3 @@ def gaussian_gradient_y_1D(standard_deviation):
     return gradient_mask
 
 
-print(gaussian_gradient_x_1D(1))
-print(gaussian_gradient_y_1D(1))
