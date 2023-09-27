@@ -32,13 +32,16 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 from PIL import Image
+import os
 
 
 from Convolution import convolution
 
-standard_dev_1 = 2
-standard_dev_2 = 4
-standard_dev_3 = 6
+# Standard Deviation Values to Test out on images:
+standard_deviation = [1,4,8]
+
+# Folder that contains images that we will be filtering:
+input_folder = 'Assignment_01/Input_Images'
 
 
 
@@ -48,26 +51,21 @@ standard_dev_3 = 6
 
 from Gaussian import X_gaussian_filter_1D,Y_gaussian_filter_1D
 
-input_folder = 'Assignment_01/Input_Images'
-images = Path(input_folder).glob('*.jpg')
-index = 0
-
-# Apply Gaussian Filter to Images
+# Apply Gaussian Filter to Images and use different standard deviations
 print("Applying Gaussian Filter")
-for image in images:
-    index += 1
-    im = Image.open(image).convert("L")
-    im = np.asarray(im)
-    im_blurred = np.zeros_like(im, dtype=np.float32)
-    im_filtered_y = np.zeros_like(im, dtype=np.float32)
-    im_filtered_x = np.zeros_like(im, dtype=np.float32)
-    im_blurred = convolution(im, Y_gaussian_filter_1D(standard_deviation=standard_dev_2))
-
-    # Save the images into the folder:
-    plt.imsave(f"Assignment_01/Output_Images/01_Gaussian_Blur/{index}_blurred.jpg",
-               im_blurred.astype(np.uint8),
-               cmap=plt.cm.Greys_r
-            )
+input_images_array= Path(input_folder).glob('*.jpg')
+for image in input_images_array:
+    for st_dev in standard_deviation:
+        filename = os.path.basename(image).split('.',1)[0]
+        im = Image.open(image).convert("L")
+        im = np.asarray(im)
+        im_blurred1 = np.zeros_like(im, dtype=np.float32)
+        im_blurred1= convolution(im, Y_gaussian_filter_1D(standard_deviation= st_dev))
+        # Save the images into the folder:
+        plt.imsave(f"Assignment_01/Output_Images/01_Gaussian_Blur/{filename}_blurred_stdev_{st_dev}_.jpg",
+                im_blurred1.astype(np.uint8),
+                cmap=plt.cm.Greys_r
+                )
 
 
 
@@ -78,30 +76,28 @@ for image in images:
 from Gradient import gaussian_gradient_x_1D
 from Gradient import gaussian_gradient_y_1D
 
-input_folder = 'Assignment_01/Input_Images'
-images = Path(input_folder).glob('*.jpg')
-index=0
-
 # Apply Gradient Filters
 print("Applying Gradient Filters")
-for image in images:
-    index += 1
-    im = Image.open(image).convert("L")
-    im = np.asarray(im)
-    im_filtered_y = np.zeros_like(im, dtype=np.float32)
-    im_filtered_x = np.zeros_like(im, dtype=np.float32)
-    im_filtered_y = convolution(im, gaussian_gradient_y_1D(standard_deviation=standard_dev_2))
-    im_filtered_x = convolution(im, gaussian_gradient_x_1D(standard_deviation=standard_dev_2))
+input_images_array= Path(input_folder).glob('*.jpg')
+for image in input_images_array:
+    for st_dev in standard_deviation:
+        filename = os.path.basename(image).split('.',1)[0]
+        im = Image.open(image).convert("L")
+        im = np.asarray(im)
+        im_filtered_y = np.zeros_like(im, dtype=np.float32)
+        im_filtered_x = np.zeros_like(im, dtype=np.float32)
+        im_filtered_y = convolution(im, gaussian_gradient_y_1D(standard_deviation=st_dev))
+        im_filtered_x = convolution(im, gaussian_gradient_x_1D(standard_deviation=st_dev))
 
-    # Save the images into the folder:
-    plt.imsave(f"Assignment_01/Output_Images/03_Gradient_Edge_Detection_Y/{index}_edged_y.jpg",
-               im_filtered_y.astype(np.uint8),
-               cmap=plt.cm.Greys_r
-            )
-    plt.imsave(f"Assignment_01/Output_Images/02_Gradient_Edge_Detection_X/{index}_edged_x.jpg",
-               im_filtered_x.astype(np.uint8),
-               cmap=plt.cm.Greys_r
-            )
+        # Save the images into the folder:
+        plt.imsave(f"Assignment_01/Output_Images/03_Gradient_Edge_Detection_Y/{filename}_edged_y_stdev_{st_dev}.jpg",
+                im_filtered_y.astype(np.uint8),
+                cmap=plt.cm.Greys_r
+                )
+        plt.imsave(f"Assignment_01/Output_Images/02_Gradient_Edge_Detection_X/{filename}_edged_x_stdev_{st_dev}.jpg",
+                im_filtered_x.astype(np.uint8),
+                cmap=plt.cm.Greys_r
+                )
 
 
 
@@ -112,40 +108,43 @@ for image in images:
 from Magnitude_Orientation import imageMagnitudeandOrientation
 from Magnitude_Orientation import sobelFilter
 
-input_folder = 'Assignment_01/Input_Images'
-images = Path(input_folder).glob('*.jpg')
-index = 0
 
 # Applying Magnitude and Orientation Filters
+input_images_array= Path(input_folder).glob('*.jpg')
 print("Applying Magnitude and Orientation Filters")
-for im in images:
-     index += 1
-     magnitude,orientation = imageMagnitudeandOrientation(im,standard_deviation=standard_dev_2)
-     plt.imsave(f"Assignment_01/Output_Images/04_Magnitude/{index}_magnitude.png",
-                magnitude.astype(np.uint8),
-                cmap=plt.cm.Greys_r
-            )
-     plt.imsave(f"Assignment_01/Output_Images/05_Orientation/{index}_orientation.png",
-                orientation.astype(np.uint8),
-                cmap=plt.cm.Greys_r
-            )
 
+for image in input_images_array:
+     for st_dev in standard_deviation:
+        filename = os.path.basename(image).split('.',1)[0]
+        magnitude,orientation = imageMagnitudeandOrientation(image,standard_deviation=st_dev)
+        plt.imsave(f"Assignment_01/Output_Images/04_Magnitude/{filename}_magnitude_stdev_{st_dev}.png",
+                    magnitude.astype(np.uint8),
+                    cmap=plt.cm.Greys_r
+                )
+        plt.imsave(f"Assignment_01/Output_Images/05_Orientation/{filename}_orientation_stdev_{st_dev}.png",
+                    orientation.astype(np.uint8),
+                    cmap=plt.cm.Greys_r
+                )
+
+
+# Applying Sobel Filters to get Magnitude and Orientation of Image.
+# This isn't part of the assignment but I wanted to compare the results.
+# Sobel Filters are like handcrafted filters that allow one to quickly get the derivative of an image without doing as many calculations
 print("Applying Sobel Filters to Determine Magnitude and Orientation")
-input_folder = 'Assignment_01/Input_Images'
-images = Path(input_folder).glob('*.jpg')
-index = 0
+input_images_array= Path(input_folder).glob('*.jpg')
 
-for im in images:
-     index += 1
-     magnitude,orientation = sobelFilter(im)
-     plt.imsave(f"Assignment_01/Output_Images/06_Magnitude_Sobel/{index}_magnitude_sobel.png",
-                magnitude.astype(np.uint8),
-                cmap=plt.cm.Greys_r
-            )
-     plt.imsave(f"Assignment_01/Output_Images/07_Orientation_Sobel/{index}_orientation_sobel.png",
-                orientation.astype(np.uint8),
-                cmap=plt.cm.Greys_r
-            )
+for image in input_images_array:
+        filename = os.path.basename(image).split('.',1)[0]
+        magnitude,orientation = sobelFilter(image)
+        plt.imsave(f"Assignment_01/Output_Images/06_Magnitude_Sobel/{filename}_magnitude_sobel_.png",
+                    magnitude.astype(np.uint8),
+                    cmap=plt.cm.Greys_r
+                )
+        plt.imsave(f"Assignment_01/Output_Images/07_Orientation_Sobel/{filename}_orientation_sobel.png",
+                    orientation.astype(np.uint8),
+                    cmap=plt.cm.Greys_r
+                )
+
 
 # ===============================================#
 # 7. Implement Non-Maximum Suppression Algorithm #
@@ -160,19 +159,18 @@ The result of applying this algorithm is that the edges will be thinner. This is
 
 from Non_Max_Suppression import non_max_suppression
 
-# Apply to the Images
-input_folder = 'Assignment_01/Input_Images'
-images = Path(input_folder).glob('*.jpg')
-index = 0
-
+# Apply to Non-Maximum Suppression to the Images
 print("Applying Non-Maximum Suppression Filters")
-for im in images:
-     index += 1
-     im_non_max_suppression = non_max_suppression(im,standard_deviation=standard_dev_2)
-     plt.imsave(f"Assignment_01/Output_Images/08_Non_Max_Suppression/{index}_NMS.png",
-                im_non_max_suppression.astype(np.uint8),
-                cmap=plt.cm.Greys_r
-            )
+input_images_array= Path(input_folder).glob('*.jpg')
+
+for image in input_images_array:
+     for st_dev in standard_deviation:
+        filename = os.path.basename(image).split('.',1)[0]
+        im_non_max_suppression = non_max_suppression(image,standard_deviation=st_dev)
+        plt.imsave(f"Assignment_01/Output_Images/08_Non_Max_Suppression/{filename}_NMS_stdev_{st_dev}.png",
+                    im_non_max_suppression.astype(np.uint8),
+                    cmap=plt.cm.Greys_r
+                )
 
 
 # =================================#
@@ -195,21 +193,20 @@ Uses a high and low threshold value to suppress the detection of false edges.
 
 from Hysteresis_Thresholding import hysteresis
 
-input_folder = 'Assignment_01/Input_Images'
-images = Path(input_folder).glob('*.jpg')
-index = 0
-
 print("Applying the last step of Canny Filter Detection: Hysteresis Thresholding")
-for im in images:
-     index += 1
-     im_hysteresis = hysteresis(image=im,
-                                standard_deviation=standard_dev_2,
-                                low_threshold=0.05,
-                                high_threshold=0.15,
-                                weak_pixel=25,
-                                strong_pixel=255
-                            )
-     plt.imsave(f"Assignment_01/Output_Images/09_Hysteresis/{index}_Hysteresis.png",
-                im_hysteresis.astype(np.uint8),
-                cmap=plt.cm.Greys_r
-            )
+input_images_array= Path(input_folder).glob('*.jpg')
+
+for image in input_images_array:
+     for st_dev in standard_deviation:
+        filename = os.path.basename(image).split('.',1)[0]
+        im_hysteresis = hysteresis(image=image,
+                                    standard_deviation=st_dev,
+                                    low_threshold=0.05,
+                                    high_threshold=0.15,
+                                    weak_pixel=25,
+                                    strong_pixel=255
+                                )
+        plt.imsave(f"Assignment_01/Output_Images/09_Hysteresis/{filename}_Hysteresis_stdev_{st_dev}.png",
+                    im_hysteresis.astype(np.uint8),
+                    cmap=plt.cm.Greys_r
+                )   

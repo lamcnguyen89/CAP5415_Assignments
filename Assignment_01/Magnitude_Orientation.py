@@ -21,7 +21,7 @@ def imageMagnitudeandOrientation(image,standard_deviation):
       im_filtered_y = convolution(image, y_filter)
       im_filtered_x = convolution(image, x_filter)
 
-      magnitude = 20*np.sqrt(im_filtered_x**2 + im_filtered_y**2)
+      magnitude = np.sqrt(im_filtered_x**2 + im_filtered_y**2)
       orientation = np.arctan(im_filtered_y,im_filtered_x)
 
       
