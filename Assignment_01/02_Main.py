@@ -34,11 +34,14 @@ import numpy as np
 from PIL import Image
 import os
 
-
+# The convolution function will be used to combine a kernel with the input images to produce an output image
 from Convolution import convolution
 
 # Standard Deviation Values to Test out on images:
-standard_deviation = [1,4,8]
+standard_deviation = [1,4,8] 
+# For the standard deviations, you don't want to make it too low because you can have too many lines in the final image. 
+# But the higher standard deviation seems to give a point of diminishing returns. A Standard Deviation of 4 seems to give the best results
+
 
 # Folder that contains images that we will be filtering:
 input_folder = 'Assignment_01/Input_Images'
@@ -150,12 +153,7 @@ for image in input_images_array:
 # 7. Implement Non-Maximum Suppression Algorithm #
 # ===============================================#
 
-"""
-Look in local neighborhood and for each pixel, you want to calculate whether the magnitude of the partial derivative of the gradients on this edge pixel is greater then the neigboring pixels. If the magnitude is greater, it is a peak and edge. If not, it is not an edge.
 
-The result of applying this algorithm is that the edges will be thinner. This is good for cluttered images where you need to have more precise descrimination of objects. It's also good for getting rid of flase edges.
-
-"""
 
 from Non_Max_Suppression import non_max_suppression
 
@@ -177,19 +175,6 @@ for image in input_images_array:
 # 6. Apply Hysteresis Thresholding on images pushed through the Non-Max Suppression Algorithm #
 # =================================#
 
-"""
-
-Uses a high and low threshold value to suppress the detection of false edges.
-
-1. Look at the lower threshold. Any pixel with a magnitude of the partial derivative lower then the threshold is not an endge and set to black.
-
-2. Then look at the higher threshold. If the magnitude of the partial derivatives is greater then the threshold value, then it is an edge.
-
-3. If the magnitude is between the higher threshold value and the low threshold value, you check to see if any neighboring pixel is conncted to another pixel with a magnitude greater then the high threshold value.
-
-    3a. To determine what counts as connected, you can do 4 connected pixels, 6 or 8 connected pixels. Meaning that the pixel we are testing needs to be connected to a certain amount of other pixels with a high threshold value or connected to a pixel that is connected to another pixel.
-
-"""
 
 from Hysteresis_Thresholding import hysteresis
 
