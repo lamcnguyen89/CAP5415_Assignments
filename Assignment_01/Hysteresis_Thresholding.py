@@ -51,10 +51,10 @@ def threshold(image,standard_deviation,low_threshold_ratio,high_threshold_ratio,
 
 
 
-def hysteresis(image,standard_deviation,low_threshold,high_threshold,weak_pixel,strong_pixel):
+def hysteresis(image,standard_deviation,low_threshold_ratio,high_threshold_ratio,weak_pixel,strong_pixel):
 
     # Import unprocessed image and perform thresholding filter to classify pixels as strong or weak
-    hysteresis_img = threshold(image,standard_deviation,low_threshold,high_threshold,weak_pixel,strong_pixel)
+    hysteresis_img = threshold(image,standard_deviation,low_threshold_ratio,high_threshold_ratio,weak_pixel,strong_pixel)
 
     # Get the shape of the image so that we can iterate over to perform the pixel classification
     m, n = hysteresis_img.shape
