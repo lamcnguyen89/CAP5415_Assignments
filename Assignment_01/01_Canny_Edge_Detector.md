@@ -15,25 +15,25 @@ From those steps we can take an image and process it in such a way that the edge
 As shown in the images below, it seems that there are diminishing returns to the Blur after a Standard Deviation of 4.
 
 #### Gaussian Blur with Standard Deviation of 1
-![Gaussian Blur Std 1](/Assignment_01/Output_Images/01_Gaussian_Blur/119082_blurred_stdev_1_.jpg)
+![Gaussian Blur Std 1](/Assignment_01/Output_Images/01_Gaussian_Blur/119082_blurred_stdev_1_.png)
 
 #### Gaussian Blur with Standard Deviation of 4
-![Gaussian Blur Std 4](/Assignment_01/Output_Images/01_Gaussian_Blur/119082_blurred_stdev_4_.jpg)
+![Gaussian Blur Std 4](/Assignment_01/Output_Images/01_Gaussian_Blur/119082_blurred_stdev_4_.png)
 
 #### Gaussian Blur with Standard Deviation of 8
-![Gaussian Blur Std 8](/Assignment_01/Output_Images/01_Gaussian_Blur/119082_blurred_stdev_8_.jpg)
+![Gaussian Blur Std 8](/Assignment_01/Output_Images/01_Gaussian_Blur/119082_blurred_stdev_8_.png)
 
 
 ## Derivative of Gaussian Filter
 
 #### Derivative of Gaussian Filter in X Direction with Standard Deviation of 1
-![Gradient Filter Std 1](/Assignment_01/Output_Images/02_Gradient_Edge_Detection_X/119082_edged_x_stdev_1.jpg)
+![Gradient Filter Std 1](/Assignment_01/Output_Images/02_Gradient_Edge_Detection_X/119082_edged_x_stdev_1.png)
 
 #### Derivative of Gaussian Filter with Standard Deviation of 4
-![Gradient Filter Std 4](/Assignment_01/Output_Images/02_Gradient_Edge_Detection_X/119082_edged_x_stdev_4.jpg)
+![Gradient Filter Std 4](/Assignment_01/Output_Images/02_Gradient_Edge_Detection_X/119082_edged_x_stdev_4.png)
 
 #### Derivative of Gaussian Filter with Standard Deviation of 8
-![Gradient Filter Std 8](/Assignment_01/Output_Images/02_Gradient_Edge_Detection_X/119082_edged_x_stdev_8.jpg)
+![Gradient Filter Std 8](/Assignment_01/Output_Images/02_Gradient_Edge_Detection_X/119082_edged_x_stdev_8.png)
 
 
 

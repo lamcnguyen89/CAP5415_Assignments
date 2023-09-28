@@ -71,7 +71,7 @@ for image in input_images_array:
         
         
         # Save the Blurred images into the folder directory named "01_Gaussian_Blur"
-        plt.imsave(f"Assignment_01/Output_Images/01_Gaussian_Blur/{filename}_blurred_stdev_{st_dev}_.jpg",
+        plt.imsave(f"Assignment_01/Output_Images/01_Gaussian_Blur/{filename}_blurred_stdev_{st_dev}_.png",
                 im_blurred1.astype(np.uint8),
                 cmap=plt.cm.Greys_r
                 )
