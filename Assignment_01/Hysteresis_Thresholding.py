@@ -21,22 +21,29 @@ import numpy as np
 
 def threshold(image,standard_deviation,low_threshold,high_threshold,weak_pixel,strong_pixel):
 
+    # Before doing thresholding, the input image has to have the Non-Max Suppression Filter Applied
     non_max_suppression_image = non_max_suppression(image,standard_deviation)
 
+    # Threshold values are a ratio so between 0-1. 
+    # High Threshold is used to identify strong pixels. Get the largest number and multiply it by the high threshold value
     high_threshold = non_max_suppression_image.max() * high_threshold
+    # Low threshold is used to identify non-relevant pixels
     low_threshold = high_threshold * low_threshold
 
+    # Create an empty matrix in the same shape as the image being processed
     m, n = non_max_suppression_image.shape
     img_threshold = np.zeros((m,n), dtype=np.int32)
 
+    # Weak and Strong Pixel values are set between 0-255 in accordance to greyscale spectrum. 
+    # You generally want the weak pixels to have a lower value then the strong to distinguish between strong and weak.
     weak = np.int32(weak_pixel)
     strong = np.int32(strong_pixel)
 
+    # Compare the pixel value brightness of the NMS image with the defined threshold value 
     strong_i, strong_j = np.where(non_max_suppression_image >= high_threshold)
-    zeros_i, zeros_j = np.where(non_max_suppression_image < low_threshold)
-
     weak_i, weak_j = np.where((non_max_suppression_image <= high_threshold) & (non_max_suppression_image >= low_threshold))
 
+    # Classify the pixel as strong or weak
     img_threshold[strong_i, strong_j] = strong
     img_threshold[weak_i, weak_j] = weak
 
@@ -44,17 +51,24 @@ def threshold(image,standard_deviation,low_threshold,high_threshold,weak_pixel,s
 
 
 
-def hysteresis(image, standard_deviation,low_threshold, high_threshold, weak_pixel,strong_pixel):
+def hysteresis(image,standard_deviation,low_threshold,high_threshold,weak_pixel,strong_pixel):
 
-
+    # Import unprocessed image and perform thresholding filter to classify pixels as strong or weak
     hysteresis_img = threshold(image,standard_deviation,low_threshold,high_threshold,weak_pixel,strong_pixel)
 
+    # Get the shape of the image so that we can iterate over to perform the pixel classification
     m, n = hysteresis_img.shape
+
+    # Set the strong and weak pixel values (0-255)
     weak = weak_pixel
     strong = strong_pixel
 
+    # Iterate through each pixel in the Threshold image
     for i in range(1, m-1):
         for j in range(1, n-1):
+
+            # If pixel being checked at the index is weak check if any of the adjacent pixels are strong. 
+            # If none of the adjacent pixels is strong, then the pixel is classified as weak and its pixel brightness is set to 0 which means it won't be shown in the final image
             if (hysteresis_img[i,j] == weak):
                 try:
                     if ((hysteresis_img[i+1, j-1] == strong) or (hysteresis_img[i+1, j] == strong) or (hysteresis_img[i+1, j+1] == strong)

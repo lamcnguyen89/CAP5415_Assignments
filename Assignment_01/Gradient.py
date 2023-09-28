@@ -3,10 +3,41 @@
 # ==================================================================================#
 import numpy as np
 
+def gaussian_gradient_x_1D(standard_deviation):
+    
+    size=10
+    # Create an array of integers from -(size//2) to size//2
+    x = np.arange(-(size // 2), (size // 2) + 1)
+    # Compute the Gaussian function for each value in the array
+    a = 1/((2*np.pi*standard_deviation)**.5)
+    b = np.exp(-(x**2)/(2*standard_deviation**2))
+    c = -x/(standard_deviation**2)
+    gradient_mask = a*b*c
+    # Normalize the filter to ensure its sum equals 1
+    gradient_mask /= np.sum(gradient_mask)
+    return gradient_mask
+
+
+
+def gaussian_gradient_y_1D(standard_deviation):
+    
+    size=10
+    # Create an array of integers from -(size//2) to size//2
+    y = np.arange(-(size // 2), (size // 2) + 1)
+    y = np.vstack(y)
+    # Compute the Gaussian function for each value in the array
+    a = 1/((2*np.pi*standard_deviation)**.5)
+    b = np.exp(-(y**2)/(2*standard_deviation**2))
+    c = -y/(standard_deviation**2)
+    gradient_mask = a*b*c
+    # Normalize the filter to ensure its sum equals 1
+    gradient_mask /= np.sum(gradient_mask)
+    return gradient_mask
+
+
 
 def gaussian_gradient_x_2D(standard_deviation):
-
-
+     
     # Create empty matrix in order to iterate through and use a Gaussian Function
     x_filter_size = 2 * int(4 * standard_deviation + 0.5) + 1
     y_filter_size = 2 * int(4 * standard_deviation + 0.5) + 1
@@ -27,8 +58,8 @@ def gaussian_gradient_x_2D(standard_deviation):
     return gaussian_derivative_mask_x
             
 
-def gaussian_gradient_y_2D(standard_deviation):
 
+def gaussian_gradient_y_2D(standard_deviation):
 
     # Create empty matrix in order to iterate through and use a Gaussian Function
     x_filter_size = 2 * int(4 * standard_deviation + 0.5) + 1
@@ -51,32 +82,6 @@ def gaussian_gradient_y_2D(standard_deviation):
             
     
 
-def gaussian_gradient_x_1D(standard_deviation):
-    size=10
-    # Create an array of integers from -(size//2) to size//2
-    x = np.arange(-(size // 2), (size // 2) + 1)
-    # Compute the Gaussian function for each value in the array
-    a = 1/((2*np.pi*standard_deviation)**.5)
-    b = np.exp(-(x**2)/(2*standard_deviation**2))
-    c = -x/(standard_deviation**2)
-    gradient_mask = a*b*c
-    # Normalize the filter to ensure its sum equals 1
-    gradient_mask /= np.sum(gradient_mask)
-    return gradient_mask
 
-
-def gaussian_gradient_y_1D(standard_deviation):
-    size=10
-    # Create an array of integers from -(size//2) to size//2
-    y = np.arange(-(size // 2), (size // 2) + 1)
-    y = np.vstack(y)
-    # Compute the Gaussian function for each value in the array
-    a = 1/((2*np.pi*standard_deviation)**.5)
-    b = np.exp(-(y**2)/(2*standard_deviation**2))
-    c = -y/(standard_deviation**2)
-    gradient_mask = a*b*c
-    # Normalize the filter to ensure its sum equals 1
-    gradient_mask /= np.sum(gradient_mask)
-    return gradient_mask
 
 

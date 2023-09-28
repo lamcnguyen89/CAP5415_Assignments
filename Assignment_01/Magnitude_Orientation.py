@@ -3,7 +3,7 @@
 # =======================================================================================#
 from PIL import Image
 import numpy as np
-from Gradient import gaussian_gradient_x_1D,gaussian_gradient_y_1D
+from Gradient import gaussian_gradient_x_1D,gaussian_gradient_y_1D,gaussian_gradient_x_2D,gaussian_gradient_y_2D
 from Convolution import convolution
 
 def imageMagnitudeandOrientation(image,standard_deviation):
