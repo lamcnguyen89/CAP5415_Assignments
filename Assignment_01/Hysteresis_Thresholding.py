@@ -19,16 +19,16 @@ Uses a high and low threshold value to suppress the detection of false edges.
 from Non_Max_Suppression import non_max_suppression
 import numpy as np
 
-def threshold(image,standard_deviation,low_threshold,high_threshold,weak_pixel,strong_pixel):
+def threshold(image,standard_deviation,low_threshold_ratio,high_threshold_ratio,weak_pixel,strong_pixel):
 
     # Before doing thresholding, the input image has to have the Non-Max Suppression Filter Applied
     non_max_suppression_image = non_max_suppression(image,standard_deviation)
 
-    # Threshold values are a ratio so between 0-1. 
-    # High Threshold is used to identify strong pixels. Get the largest number and multiply it by the high threshold value
-    high_threshold = non_max_suppression_image.max() * high_threshold
+    # Threshold values are between 0-255 
+    # High Threshold is used to identify strong pixels. Get the largest number and multiply it by the high threshold 
+    high_threshold = non_max_suppression_image.max() * high_threshold_ratio
     # Low threshold is used to identify non-relevant pixels
-    low_threshold = high_threshold * low_threshold
+    low_threshold = high_threshold * low_threshold_ratio
 
     # Create an empty matrix in the same shape as the image being processed
     m, n = non_max_suppression_image.shape

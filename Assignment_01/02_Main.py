@@ -219,8 +219,8 @@ for image in input_images_array:
         # Input the original image with the filter.
         im_hysteresis = hysteresis(image=image,
                                     standard_deviation=st_dev,
-                                    low_threshold=0.05,
-                                    high_threshold=0.09,
+                                    low_threshold_ratio=0.05,
+                                    high_threshold_ratio=0.09,
                                     weak_pixel=125,
                                     strong_pixel=255
                                 )
