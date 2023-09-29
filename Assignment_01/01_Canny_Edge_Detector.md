@@ -11,8 +11,10 @@ Canny Edge Detection is the process of doing these steps to an image:
 
 From those steps we can take an image and process it in such a way that the edges of objects are shown. It's like making a line drawing of an image. This allows for efficient detection of objects without having all the noise of colors and shadows getting in the way. Also Edge detection can be used to produce learnable features for a Machine Learning Model. 
 
+## Observed Effects of Changing the Standard Deviation
+As shown in the images below, it seems that there are diminishing returns to the Blur after a Standard Deviation of 4. 
+
 ## Gaussian Blur Filter
-As shown in the images below, it seems that there are diminishing returns to the Blur after a Standard Deviation of 4.
 
 #### Gaussian Blur with Standard Deviation of 1
 ![Gaussian Blur Std 1](/Assignment_01/Output_Images/01_Gaussian_Blur/119082_blurred_stdev_1_.png)
@@ -24,16 +26,30 @@ As shown in the images below, it seems that there are diminishing returns to the
 ![Gaussian Blur Std 8](/Assignment_01/Output_Images/01_Gaussian_Blur/119082_blurred_stdev_8_.png)
 
 
-## Derivative of Gaussian Filter
+## Derivative of Gaussian Filter X Direction
 
 #### Derivative of Gaussian Filter in X Direction with Standard Deviation of 1
 ![Gradient Filter Std 1](/Assignment_01/Output_Images/02_Gradient_Edge_Detection_X/119082_edged_x_stdev_1.png)
 
-#### Derivative of Gaussian Filter with Standard Deviation of 4
+#### Derivative of Gaussian Filter in X Direction with Standard Deviation of 4
 ![Gradient Filter Std 4](/Assignment_01/Output_Images/02_Gradient_Edge_Detection_X/119082_edged_x_stdev_4.png)
 
-#### Derivative of Gaussian Filter with Standard Deviation of 8
+#### Derivative of Gaussian Filter in X Direction with Standard Deviation of 8
 ![Gradient Filter Std 8](/Assignment_01/Output_Images/02_Gradient_Edge_Detection_X/119082_edged_x_stdev_8.png)
+
+
+
+
+## Derivative of Gaussian Filter Y Direction
+
+#### Derivative of Gaussian Filter in Y Direction with Standard Deviation of 1
+![Gradient Filter Std 1](/Assignment_01/Output_Images/03_Gradient_Edge_Detection_Y/119082_edged_y_stdev_1.png)
+
+#### Derivative of Gaussian Filter in Y Direction with Standard Deviation of 4
+![Gradient Filter Std 4](/Assignment_01/Output_Images/03_Gradient_Edge_Detection_Y/119082_edged_y_stdev_4.png)
+
+#### Derivative of Gaussian Filter in Y Direction with Standard Deviation of 8
+![Gradient Filter Std 8](/Assignment_01/Output_Images/03_Gradient_Edge_Detection_Y/119082_edged_y_stdev_8.png)
 
 
 
@@ -49,6 +65,21 @@ As shown in the images below, it seems that there are diminishing returns to the
 ![Magnitude Filter std 3](/Assignment_01/Output_Images/04_Magnitude/119082_magnitude_stdev_8.png)
 
 
+
+## Orientation of the Image
+
+#### Orientation of the Image with Standard Deviation of 1
+![Orientation Filter std 1](/Assignment_01/Output_Images/05_Orientation/119082_orientation_stdev_1.png)
+
+#### Orientation of the Image with Standard Deviation of 4
+![Orientation Filter std 4](/Assignment_01/Output_Images/05_Orientation/119082_orientation_stdev_4.png)
+
+
+#### Orientation of the Image with Standard Deviation of 8
+![Orientation Filter std 8](/Assignment_01/Output_Images/05_Orientation/119082_orientation_stdev_8.png)
+
+
+
 ## Non-Maximum Suppression of Image
 
 #### Non-Maximum Suppression of Image with Standard Deviation of 1
@@ -59,6 +90,8 @@ As shown in the images below, it seems that there are diminishing returns to the
 
 #### Non-Maximum Suppression of Image with Standard Deviation of 8
 ![NMS Std 1](/Assignment_01/Output_Images/08_Non_Max_Suppression/119082_NMS_stdev_8.png)
+
+
 
 
 ## Hysteresis after Double Threshold
