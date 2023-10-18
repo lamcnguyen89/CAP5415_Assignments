@@ -56,6 +56,10 @@ https://medium.com/@nutanbhogendrasharma/pytorch-convolutional-neural-network-wi
 
 https://www.kaggle.com/code/justuser/mnist-with-pytorch-fully-connected-network
 
+https://pypi.org/project/tqdm-loggable/
+
+
+
 """
 
 # =======================================================#
@@ -69,11 +73,43 @@ import torch.nn.functional as F # All functions without parameters
 from torch.utils.data import DataLoader # Easier dataset management such as minibatches
 import torchvision.datasets as datasets # Standard datasets that can be used as test training data
 import torchvision.transforms as transforms # Transformations that can be performed on the dataset
-from tqdm import tqdm # For progress bar
+
+from tqdm_loggable.auto import tqdm
+from tqdm_loggable.tqdm_logging import tqdm_logging
+import datetime
+import logging
+import time
+import io
 
 
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+class TqdmToLogger(io.StringIO):
+    """
+        Output stream for TQDM which will output to logger module instead of
+        the StdOut.
+    """
+    logger = None
+    level = None
+    buf = ''
+    def __init__(self,logger,level=None):
+        super(TqdmToLogger, self).__init__()
+        self.logger = logger
+        self.level = level or logging.INFO
+    def write(self,buf):
+        self.buf = buf.strip('\r\n\t ')
+    def flush(self):
+        self.logger.log(self.level, self.buf)
+
+if __name__ == "__main__":
+    logging.basicConfig(format='%(asctime)s [%(levelname)-8s] %(message)s')
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+
+    tqdm_out = TqdmToLogger(logger,level=logging.INFO)
+    for x in tqdm(range(100),file=tqdm_out,mininterval=30,):
+        time.sleep(.5)
 
 
 # =======================================================#
@@ -157,7 +193,7 @@ for epoch in range(num_epochs):
         targets = targets = targets.to(device=device)
 
         data = data.reshape(data.shape[0], -1) # The -1 unrolls the image to single dimension. Why? Not Sure
-        
+    
        # print(data.shape) 
 
         # Forward
