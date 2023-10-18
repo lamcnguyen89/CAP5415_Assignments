@@ -48,6 +48,13 @@ Assignment Details:
     6. The traces from running testCNN.py <mode> for each of the 5 steps should be saved in output.txt. Each Step is 1 point
         
  
+Sources:
+
+https://medium.com/@shashankshankar10/introduction-to-neural-networks-build-a-single-layer-perceptron-in-pytorch-c22d9b412ccf
+
+https://medium.com/@nutanbhogendrasharma/pytorch-convolutional-neural-network-with-mnist-dataset-4e8a4265e118
+
+https://www.kaggle.com/code/justuser/mnist-with-pytorch-fully-connected-network
 
 """
 
@@ -55,19 +62,145 @@ Assignment Details:
 # 1. Import basic Modules and Functions and set variables
 # =======================================================#
 
-from pathlib import Path
-import matplotlib.pyplot as plt
-import numpy as np
-from PIL import Image
-import os
 import torch
+import torch.nn as nn # All the Neural network models, loss functions
+import torch.optim as optim # Optimization algorithms
+import torch.nn.functional as F # All functions without parameters
+from torch.utils.data import DataLoader # Easier dataset management such as minibatches
+import torchvision.datasets as datasets # Standard datasets that can be used as test training data
+import torchvision.transforms as transforms # Transformations that can be performed on the dataset
+from tqdm import tqdm # For progress bar
 
+
+# Device configuration
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 # =======================================================#
-# 2. Create Fully Connected hidden layer
+# 2a. Create Fully Connected hidden lanyer
 # =======================================================#
 
+class NN(nn.Module):
+    def __init__(self,input_size, num_classes):
+        super(NN, self).__init__() # The Super keyword calls the initialization of the parent class
+        self.fc1 = nn.Linear(input_size, 100) # Create a small NN
+        self.fc2 = nn.Linear(100, num_classes) 
+
+    def forward(self, x):
+        x = F.sigmoid(self.fc1(x))
+        x = self.fc2(x)
+        return x
+    
+model = NN(784, 10) # Check the model to see if it runs correctly by using some random test data. 10 is for the number of digits. We want 10 values for each of the 784 images
+x = torch.randn(64, 784) # Number of examples to run simultaneously
+print(model(x).shape) # Returns the shape of the model
+
+# =======================================================#
+# 2b. Train the Fully Connected Hidden Layer:
+# =======================================================#
+ 
+# Hyperparameters
+input_size = 28*28
+num_classes= 10
+learning_rate = 0.1
+batch_size = 10
+num_epochs = 64
+    
+
+
+# Prepare the data for processing through the Network:
+
+train_dataset = datasets.MNIST(root='dataset/', 
+               train=True, 
+               transform=transforms.ToTensor(),
+               download=True
+               )#Transforms transforms numpy array to tensors so that pytorch can use the data
+
+
+train_loader = DataLoader(
+    dataset = train_dataset,
+    batch_size = batch_size,
+    shuffle = True
+)
+
+test_dataset = datasets.MNIST(root='dataset/', 
+               train=False, 
+               transform=transforms.ToTensor(),
+               download=True
+               )#Transforms transforms numpy array to tensors so that pytorch can use the data
+
+test_loader = DataLoader(
+    dataset= test_dataset,
+    batch_size = batch_size,
+    shuffle = True
+)
+
+#Initialize Model
+model = NN(
+    input_size=input_size,
+    num_classes=num_classes
+).to(device)
+
+
+# Define the loss function and Optimizer
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.SGD(model.parameters(), 
+                      lr=learning_rate)
+
+
+# Train Network
+for epoch in range(num_epochs):
+    for batch_idx, (data, targets) in enumerate(tqdm(train_loader)):
+        
+        # Get data to Cuda/gpu if possible
+        data = data.to(device=device)
+        targets = targets = targets.to(device=device)
+
+        data = data.reshape(data.shape[0], -1) # The -1 unrolls the image to single dimension. Why? Not Sure
+        
+       # print(data.shape) 
+
+        # Forward
+        scores = model(data)
+        loss = criterion(scores, targets)
+
+        # Go Backward in the network:
+        optimizer.zero_grad()
+        loss.backward()
+
+        # gradient descent or adam step
+        optimizer.step()
+
+
+# Check Accuracy on training and test to see the accuracy of the model
+def check_accuracy(loader, model):
+    if loader.dataset.train:
+        print("Checking accuracy on training data")
+    else:
+        print("Checking accuracy on test data")
+    num_correct = 0
+    num_samples = 0
+    model.eval()
+
+    with torch.no_grad(): # No gradients have to be calculated
+        for x, y in loader:
+            x = x.to(device=device)
+            y = y.to(device=device)
+            x = x.reshape(x.shape[0], -1) # Have to reshape data. Why? Let me figure it out.
+
+            scores = model(x)
+            _,predictions = scores.max(1)
+            num_correct += (predictions == y).sum()
+            num_samples += predictions.size(0)
+
+        print(f'Got {num_correct} / {num_samples} with accuracy {float(num_correct)/float(num_samples) * 100:.2f}')
+
+    model.train()
+    acc = num_correct/num_samples
+    return acc
+
+check_accuracy(train_loader,model)
+check_accuracy(test_loader,model)
 
 
 # ================================================================================#
