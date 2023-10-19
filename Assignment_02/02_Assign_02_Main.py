@@ -82,29 +82,18 @@ import logging
 import time
 import io
 
-# # Class for logging progress of training
-# class TqdmLoggingHandler(logging.Handler):
-#     def __init__(self, level=logging.NOTSET):
-#         super().__init__(level)
+logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        filename="NN_Training_Log.log" # Save log to a file
+    )
 
-#     def emit(self, record):
-#         try:
-#             msg = self.format(record)
-#            # tqdm.tqdm.write(msg)
-#             self.flush()
-#         except Exception:
-#             self.handleError(record) 
+tqdm_logging.set_level(logging.INFO)
+tqdm_logging.set_log_rate(datetime.timedelta(seconds=3600))  
 
-# logging.basicConfig(level=logging.INFO, filename="log.txt", filemode="w")
-# log = logging.getLogger(__name__)
-# log.addHandler(TqdmLoggingHandler())
 
-# Set up logging to write progress of training to text file
-logging.basicConfig(level=logging.INFO, 
-                    filename="log.txt", 
-                    filemode="w",
-                    format="%(asctime)s - %(levelname)s - %(message)s"
-                    )
+
 
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -175,14 +164,15 @@ model = NN(
     num_classes=num_classes
 ).to(device)
 
-
+logging.info(f"Begin Training MNIST dataset with this model: {model}")
 # Define the loss function and Optimizer
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), 
                       lr=learning_rate)
 
-
+epoch_counter= 0
 # Train Network
+logging.info(f"Begin Training with ")
 for epoch in range(num_epochs):
     for batch_idx, (data, targets) in enumerate(tqdm(train_loader)):
         
@@ -204,14 +194,24 @@ for epoch in range(num_epochs):
 
         # gradient descent or adam step
         optimizer.step()
+        
+        #logging.info("Training single layer Neural Network ")
+        if epoch > epoch_counter+4:
+            logging.info(f"Training Epoch: {epoch}")
 
+            epoch_counter = epoch
+
+
+epoch_counter = 0
 
 # Check Accuracy on training and test to see the accuracy of the model
 def check_accuracy(loader, model):
     if loader.dataset.train:
         print("Checking accuracy on training data")
+        logging.info("Checking accuracy on training data")
     else:
         print("Checking accuracy on test data")
+        logging.info("Checking accuracy on test data")
     num_correct = 0
     num_samples = 0
     model.eval()
@@ -228,6 +228,7 @@ def check_accuracy(loader, model):
             num_samples += predictions.size(0)
 
         print(f'Got {num_correct} / {num_samples} with accuracy {float(num_correct)/float(num_samples) * 100:.2f}')
+        logging.info(f'Got {num_correct} / {num_samples} with accuracy {float(num_correct)/float(num_samples) * 100:.2f}')
 
     model.train()
     acc = num_correct/num_samples
