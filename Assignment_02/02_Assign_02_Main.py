@@ -57,6 +57,7 @@ https://medium.com/@nutanbhogendrasharma/pytorch-convolutional-neural-network-wi
 https://www.kaggle.com/code/justuser/mnist-with-pytorch-fully-connected-network
 
 https://pypi.org/project/tqdm-loggable/
+https://www.youtube.com/watch?v=urrfJgHwIJA&t=322s
 
 
 
@@ -81,35 +82,32 @@ import logging
 import time
 import io
 
+# # Class for logging progress of training
+# class TqdmLoggingHandler(logging.Handler):
+#     def __init__(self, level=logging.NOTSET):
+#         super().__init__(level)
+
+#     def emit(self, record):
+#         try:
+#             msg = self.format(record)
+#            # tqdm.tqdm.write(msg)
+#             self.flush()
+#         except Exception:
+#             self.handleError(record) 
+
+# logging.basicConfig(level=logging.INFO, filename="log.txt", filemode="w")
+# log = logging.getLogger(__name__)
+# log.addHandler(TqdmLoggingHandler())
+
+# Set up logging to write progress of training to text file
+logging.basicConfig(level=logging.INFO, 
+                    filename="log.txt", 
+                    filemode="w",
+                    format="%(asctime)s - %(levelname)s - %(message)s"
+                    )
 
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-class TqdmToLogger(io.StringIO):
-    """
-        Output stream for TQDM which will output to logger module instead of
-        the StdOut.
-    """
-    logger = None
-    level = None
-    buf = ''
-    def __init__(self,logger,level=None):
-        super(TqdmToLogger, self).__init__()
-        self.logger = logger
-        self.level = level or logging.INFO
-    def write(self,buf):
-        self.buf = buf.strip('\r\n\t ')
-    def flush(self):
-        self.logger.log(self.level, self.buf)
-
-if __name__ == "__main__":
-    logging.basicConfig(format='%(asctime)s [%(levelname)-8s] %(message)s')
-    logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
-
-    tqdm_out = TqdmToLogger(logger,level=logging.INFO)
-    for x in tqdm(range(100),file=tqdm_out,mininterval=30,):
-        time.sleep(.5)
 
 
 # =======================================================#
