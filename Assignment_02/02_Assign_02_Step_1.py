@@ -97,7 +97,14 @@ tqdm_logging.set_log_rate(datetime.timedelta(seconds=3600))
 
 
 
-# Device configuration
+# Hyperparameters
+input_size = 28*28
+hidden_size = 100
+num_classes= 10
+learning_rate = 0.1
+batch_size = 10
+num_epochs = 64
+    
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
@@ -106,32 +113,22 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # =======================================================#
 
 class NN(nn.Module):
-    def __init__(self,input_size, num_classes):
+    def __init__(self,input_size, hidden_size, num_classes):
         super(NN, self).__init__() # The Super keyword calls the initialization of the parent class
-        self.fc1 = nn.Linear(input_size, 100) # Create a small NN
-        self.fc2 = nn.Linear(100, num_classes) 
+        self.fc1 = nn.Linear(input_size, hidden_size) # Create a small NN
+        self.fc2 = nn.Linear(hidden_size, num_classes) 
 
     def forward(self, x):
         x = F.sigmoid(self.fc1(x))
         x = self.fc2(x)
         return x
     
-model = NN(784, 10) # Check the model to see if it runs correctly by using some random test data. 10 is for the number of digits. We want 10 values for each of the 784 images
-x = torch.randn(64, 784) # Number of examples to run simultaneously
-print(model(x).shape) # Returns the shape of the model
+
 
 # =======================================================#
 # 2b. Train the Fully Connected Hidden Layer:
 # =======================================================#
  
-# Hyperparameters
-input_size = 28*28
-num_classes= 10
-learning_rate = 0.1
-batch_size = 10
-num_epochs = 64
-    
-
 
 # Prepare the data for processing through the Network:
 
@@ -163,6 +160,7 @@ test_loader = DataLoader(
 #Initialize Model
 model = NN(
     input_size=input_size,
+    hidden_size=hidden_size,
     num_classes=num_classes
 ).to(device)
 
@@ -176,30 +174,35 @@ optimizer = optim.SGD(model.parameters(),
 epoch_counter= 0
 # Train Network
 for epoch in range(num_epochs):
-    for batch_idx, (data, targets) in enumerate(tqdm(train_loader)):
+    for batch_idx, (images, labels) in enumerate(tqdm(train_loader)):
         
-        # Get data to Cuda/gpu if possible
-        data = data.to(device=device)
-        targets = targets = targets.to(device=device)
+        # Get data to Cuda/gpu if possible. Data is the tuple of the images and labels
+        # We have to reshape images because they are (10,1,28,28) when input into the network.
+        # But for a fully connected, we need to have a shape (10,784)
+        # 10 is the number of batches
+        images = images.reshape(-1,28*28)
+        print(images.size())
 
-        data = data.reshape(data.shape[0], -1) # The -1 unrolls the image to single dimension. Why? Not Sure
-    
-       # print(data.shape) 
+        images = images.to(device=device) # Images
+        labels = labels.to(device=device) # label that classifies image
+
+
 
         # Forward
-        scores = model(data)
-        loss = criterion(scores, targets)
+        outputs = model(images)
+        loss = criterion(outputs, labels) # Predicted outputs vs actual labels
 
         # Go Backward in the network:
-        optimizer.zero_grad()
-        loss.backward()
+        optimizer.zero_grad() # Empty the values in the gradient attribute
+        loss.backward() # Backpropagation
 
         # gradient descent or adam step
-        optimizer.step()
+        optimizer.step() # Update parameters
         
         #logging.info("Training single layer Neural Network ")
         if epoch > epoch_counter+4:
-            logging.info(f"Training Epoch: {epoch}")
+            logging.info(f"Training Epoch: {epoch}, loss = {loss.item():.4f}")
+
 
             epoch_counter = epoch
 

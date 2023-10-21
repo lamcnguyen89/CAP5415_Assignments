@@ -26,7 +26,14 @@ tqdm_logging.set_level(logging.INFO)
 tqdm_logging.set_log_rate(datetime.timedelta(seconds=3600))  
 
 
-# Device configuration
+# Hyperparameters
+input_channels = 1
+hidden_size = 100
+num_classes= 10
+learning_rate = 0.1
+batch_size = 10
+num_epochs = 64
+    
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
@@ -35,36 +42,44 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # ================================================================================#
 
 class NN_2(nn.Module):
-    def __init__(self,input_size, num_classes):
+    def __init__(self,input_channels,hidden_size, num_classes):
         super(NN_2, self).__init__() # The Super keyword calls the initialization of the parent class
-        self.fc1 = nn.Linear(input_size, 100) # Create a small NN
-        self.conv1 = nn.Conv2d(in_channels=100,
-                               out_channels=8,
-                               kernel_size=(3,3),
+        
+        self.conv1 = nn.Conv2d(in_channels=input_channels,
+                               out_channels=40,
+                               kernel_size=(5,5),
                                stride=(1,1),
                                padding=(1,1)
                                )
-        self.pool1 = nn.MaxPool2d(kernel_size=(2,2),
-                                  stride=(2,2)
-        ) 
-        self.conv2 = nn.Conv2d(in_channels=8,
-                               out_channels=8,
-                               kernel_size=(3,3),
+        self.conv2 = nn.Conv2d(in_channels=40,
+                               out_channels=40,
+                               kernel_size=(5,5),
                                stride=(1,1),
                                padding=(1,1)
-                               ) 
-        self.pool2 = nn.MaxPool2d(kernel_size=(2,2),
+                               )
+        self.pool = nn.MaxPool2d(kernel_size=(2,2),
                                   stride=(2,2)
-        )
-        self.fc2 = nn.Linear(8, num_classes)
+        ) 
+        self.fc1 = nn.Linear(40*4*4, hidden_size) #
+        self.fc2 = nn.Linear(hidden_size, num_classes)
+
+    def num_flat_features(self,x):
+        size = x.size()[1:] # all dimensions except batch dimension
+        num_features = 10
+        for s in size:
+            num_features *=s
+
+        return num_features
 
     def forward(self, x):
-        x = F.sigmoid(self.fc1(x))
         x = F.sigmoid(self.conv1(x))
-        x = self.pool1(x)
+        x = self.pool(x)
         x = F.sigmoid(self.conv2(x))
-        x = self.pool2(x)
+        x = self.pool(x)
+        x = x.view(-1,self.num_flat_features(x))
+        x = F.sigmoid(self.fc1(x))
         x = self.fc2(x)
+
         return x
     
 
@@ -72,13 +87,7 @@ class NN_2(nn.Module):
 # =======================================================#
 # 3b. Train the Convolutional Neural:
 # =======================================================#
- 
-# Hyperparameters
-input_size = 28*28*1
-num_classes= 10
-learning_rate = 0.1
-batch_size = 10
-num_epochs = 64
+
     
 
 
@@ -111,7 +120,8 @@ test_loader = DataLoader(
 
 #Initialize Model
 model = NN_2(
-    input_size=input_size,
+    input_channels=input_channels,
+    hidden_size=hidden_size,
     num_classes=num_classes
 ).to(device)
 
@@ -130,8 +140,6 @@ for epoch in range(num_epochs):
         # Get data to Cuda/gpu if possible
         data = data.to(device=device)
         targets = targets = targets.to(device=device)
-
-        data = data.reshape(data.shape[0], -1) # The -1 unrolls the image to single dimension. Why? Not Sure
     
        # print(data.shape) 
 
