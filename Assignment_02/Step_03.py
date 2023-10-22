@@ -118,7 +118,7 @@ train_loader = DataLoader(
     shuffle = True
 )
 
-test_dataset = datasets.MNIST(root='Assignment_03/dataset/', 
+test_dataset = datasets.MNIST(root='Assignment_02/dataset/', 
                train=False, 
                transform=transforms.ToTensor(),
                download=True
@@ -170,7 +170,7 @@ for epoch in range(num_epochs):
         
         #logging.info("Training single layer Neural Network ")
         if epoch > epoch_counter+4:
-            logging.info(f"Training Epoch: {epoch}")
+            logging.info(f"Training Epoch: {epoch}, loss = {loss.item():.4f}")
 
             epoch_counter = epoch
 

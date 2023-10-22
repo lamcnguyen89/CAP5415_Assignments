@@ -176,7 +176,7 @@ for epoch in range(num_epochs):
         
         #logging.info("Training single layer Neural Network ")
         if epoch > epoch_counter+4:
-            logging.info(f"Training Epoch: {epoch}")
+            logging.info(f"Training Epoch: {epoch}, loss = {loss.item():.4f}")
 
             epoch_counter = epoch
 
