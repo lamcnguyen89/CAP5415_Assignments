@@ -1,3 +1,14 @@
+"""
+Programming Assignment_02: Convolutional NNs
+
+Step 04:
+
+Add another fully connected (FC) layer.
+        a. This new FC layer should have 100 neurons
+        b. Train with the same setup as Step 3. meaning you use ReLU activation function and a learning_rate=0.03
+        
+"""
+
 import torch
 import torch.nn as nn # All the Neural network models, loss functions
 import torch.optim as optim # Optimization algorithms
@@ -7,12 +18,12 @@ import torchvision.datasets as datasets # Standard datasets that can be used as 
 import torchvision.transforms as transforms # Transformations that can be performed on the dataset
 from tqdm import tqdm # For progress bar
 
+# Import some packages for logging training and showing progress
 from tqdm_loggable.auto import tqdm
 from tqdm_loggable.tqdm_logging import tqdm_logging
 import datetime
 import logging
-import time
-import io
+
 
 # Set up some basic logging to record traces of training
 logging.basicConfig(

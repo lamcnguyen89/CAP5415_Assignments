@@ -1,5 +1,9 @@
 """
-2. Next insert two Convolutional Laters to the network built in Step 1. 
+Programming Assignment_02: Convolutional NNs
+
+Step 02:
+
+Next insert two Convolutional Laters to the network built in Step 1. 
         a. For each CNN layer, include a pooling layer and Sigmoid Activation. 
         b. Pool over 2x2 regions, 40 kernels, stride=1, kernel_size=5x5.
         c. Train with SGD with a learning rate=0.1, epoch=60, mini-batch size = 10, no regularization
@@ -13,12 +17,11 @@ from torch.utils.data import DataLoader # Easier dataset management such as mini
 import torchvision.datasets as datasets # Standard datasets that can be used as test training data
 import torchvision.transforms as transforms # Transformations that can be performed on the dataset
 
+# Import some packages for logging training and showing progress
 from tqdm_loggable.auto import tqdm
 from tqdm_loggable.tqdm_logging import tqdm_logging
 import datetime
 import logging
-import time
-import io
 
 
 # Set up some basic logging to record traces of training
@@ -30,7 +33,6 @@ logging.basicConfig(
     )
 
 tqdm_logging.set_level(logging.INFO)
-tqdm_logging.set_log_rate(datetime.timedelta(seconds=3600))  
 
 
 # Hyperparameters
@@ -147,8 +149,6 @@ for epoch in range(num_epochs):
         data = data.to(device=device)
         targets = targets = targets.to(device=device)
     
-       # print(data.shape) 
-
         # Forward
         scores = model(data)
         loss = criterion(scores, targets)

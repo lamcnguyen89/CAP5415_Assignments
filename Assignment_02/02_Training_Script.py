@@ -65,8 +65,10 @@ https://www.youtube.com/watch?v=urrfJgHwIJA&t=322s
 import subprocess
 
 
-for i in range(5):
+# Loop through folder with the different Neural Networks created for this assignment and implement training:
+for i in range(6):
     subprocess.run(f"python Assignment_02/Step_0{i+1}.py", shell=True)
+
 
 
 

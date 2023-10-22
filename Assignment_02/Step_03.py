@@ -1,9 +1,16 @@
 """
-    3. For the network created in Step 2, replace Sigmoid with ReLU.
+Programming Assignment_02: Convolutional NNs
+
+Step 03:
+
+For the network created in Step 2, replace Sigmoid with ReLU.
         a. Train the model with a new Learning_rate=0.03.
 
 """
 
+# =======================================================#
+# 1. Import basic Modules and Functions and set variables
+# =======================================================#
 
 import torch
 import torch.nn as nn # All the Neural network models, loss functions
@@ -14,12 +21,11 @@ import torchvision.datasets as datasets # Standard datasets that can be used as 
 import torchvision.transforms as transforms # Transformations that can be performed on the dataset
 from tqdm import tqdm # For progress bar
 
+# Import some packages for logging training and showing progress
 from tqdm_loggable.auto import tqdm
 from tqdm_loggable.tqdm_logging import tqdm_logging
 import datetime
 import logging
-import time
-import io
 
 # Set up some basic logging to record traces of training
 logging.basicConfig(
@@ -30,8 +36,7 @@ logging.basicConfig(
     )
 
 tqdm_logging.set_level(logging.INFO)
-tqdm_logging.set_log_rate(datetime.timedelta(seconds=3600))  
-
+ 
 
 # Hyperparameters
 input_channels = 1
@@ -45,12 +50,12 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 # ================================================================================#
-# 3a. Next insert two Convolutional Laters to the network built in Step 1 and train
+# 2. Replace Sigmoid Activation function from Step 2 with a Relu function:
 # ================================================================================#
 
-class NN_2(nn.Module):
+class NN_3(nn.Module):
     def __init__(self,input_channels,hidden_size, num_classes):
-        super(NN_2, self).__init__() # The Super keyword calls the initialization of the parent class
+        super(NN_3, self).__init__() # The Super keyword calls the initialization of the parent class
         
         self.conv1 = nn.Conv2d(in_channels=input_channels,
                                out_channels=40,
@@ -93,7 +98,7 @@ class NN_2(nn.Module):
 
 
 # =======================================================#
-# 3b. Train the Convolutional Neural:
+# 3b. Train the Convolutional Neural Network:
 # =======================================================#
 
 
@@ -125,7 +130,7 @@ test_loader = DataLoader(
 )
 
 #Initialize Model
-model = NN_2(
+model = NN_3(
     input_channels=input_channels,
     hidden_size=hidden_size,
     num_classes=num_classes
@@ -169,7 +174,12 @@ for epoch in range(num_epochs):
 
 epoch_counter = 0
 
-# Check Accuracy on training and test to see the accuracy of the model
+
+
+# =========================================================================#
+# 4. Check Accuracy on training and test to see the accuracy of the model:
+# =========================================================================#
+
 def check_accuracy(loader, model):
     if loader.dataset.train:
         print("Checking accuracy on training data")
