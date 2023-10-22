@@ -117,7 +117,7 @@ optimizer = optim.SGD(model.parameters(),
 epoch_counter= 0
 # Train Network
 for epoch in range(num_epochs):
-    tqdm.write(f"Training Epoch {epoch}/{num_epochs}")
+    tqdm.write(f"Training Epoch {epoch+1}/{num_epochs}")
     for batch_idx, (images, labels) in enumerate(tqdm(train_loader)):
         
         
