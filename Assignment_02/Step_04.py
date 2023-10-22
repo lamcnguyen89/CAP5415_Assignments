@@ -151,7 +151,9 @@ optimizer = optim.SGD(model.parameters(),
 epoch_counter= 0
 # Train Network
 for epoch in range(num_epochs):
+    tqdm.write(f"Training Epoch {epoch}/{num_epochs}")
     for batch_idx, (data, targets) in enumerate(tqdm(train_loader)):
+        tqdm.set_description(f"Epoch: {epoch}")
         
         # Get data to Cuda/gpu if possible
         data = data.to(device=device)

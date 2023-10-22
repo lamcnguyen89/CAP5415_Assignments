@@ -117,7 +117,10 @@ optimizer = optim.SGD(model.parameters(),
 epoch_counter= 0
 # Train Network
 for epoch in range(num_epochs):
+    tqdm.write(f"Training Epoch {epoch}/{num_epochs}")
     for batch_idx, (images, labels) in enumerate(tqdm(train_loader)):
+        
+        
         
         # Get data to Cuda/gpu if possible. Data is the tuple of the images and labels
         # We have to reshape images because they are (10,1,28,28) when input into the network.

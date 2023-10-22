@@ -69,11 +69,16 @@ from pynvml import nvmlInit, nvmlDeviceGetHandleByIndex, nvmlDeviceGetMemoryInfo
 import time
 
 
+min_memory_available = 8*1024*1024*1024 # 8gb memory
+
+
+# Clear GPU memory after Training Each Model
 def clear_gpu_memory():
     torch.cuda.empty_cache()
     gc.collect()
     # del variables
 
+# Wait until There is enough Memory to train
 def wait_until_enough_gpu_memory(min_memory_available, max_retries=10, sleep_time=5):
     nvmlInit()
     handle = nvmlDeviceGetHandleByIndex(torch.cuda.current_device())
@@ -89,7 +94,6 @@ def wait_until_enough_gpu_memory(min_memory_available, max_retries=10, sleep_tim
 
 
 
-min_memory_available = 8*1024*1024*1024 # 8gb memory
 # Loop through folder with the different Neural Networks created for this assignment,implement training and log results in the logs folder:
 for i in range(5):
     subprocess.run(f"python Assignment_02/Step_0{i+1}.py", shell=True)
