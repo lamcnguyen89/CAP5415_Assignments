@@ -21,6 +21,7 @@ import torchvision.datasets as datasets # Standard datasets that can be used as 
 import torchvision.transforms as transforms # Transformations that can be performed on the dataset
 from tqdm import tqdm # For progress bar
 
+
 # Import some packages for logging training and showing progress
 from tqdm_loggable.auto import tqdm
 from tqdm_loggable.tqdm_logging import tqdm_logging
@@ -32,7 +33,7 @@ logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
-        filename="Assignment_02/logsStep_03_log.txt" # Save log to a file
+        filename="Assignment_02/logs/Step_03_log.txt" # Save log to a file
     )
 
 tqdm_logging.set_level(logging.INFO)
@@ -44,7 +45,7 @@ hidden_size = 100
 num_classes= 10
 learning_rate = 0.03
 batch_size = 10
-num_epochs = 64
+num_epochs = 60
     
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -195,7 +196,6 @@ def check_accuracy(loader, model):
         for x, y in loader:
             x = x.to(device=device)
             y = y.to(device=device)
-            x = x.reshape(x.shape[0], -1) # Have to reshape data. Why? Let me figure it out.
 
             scores = model(x)
             _,predictions = scores.max(1)
@@ -211,3 +211,5 @@ def check_accuracy(loader, model):
 
 check_accuracy(train_loader,model)
 check_accuracy(test_loader,model)
+
+ 

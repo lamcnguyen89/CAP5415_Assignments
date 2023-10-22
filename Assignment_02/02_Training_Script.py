@@ -63,11 +63,45 @@ https://www.youtube.com/watch?v=urrfJgHwIJA&t=322s
 """
 
 import subprocess
+import torch
+import gc
+from pynvml import nvmlInit, nvmlDeviceGetHandleByIndex, nvmlDeviceGetMemoryInfo
+import time
 
 
+def clear_gpu_memory():
+    torch.cuda.empty_cache()
+    gc.collect()
+    # del variables
+
+def wait_until_enough_gpu_memory(min_memory_available, max_retries=10, sleep_time=5):
+    nvmlInit()
+    handle = nvmlDeviceGetHandleByIndex(torch.cuda.current_device())
+
+    for _ in range(max_retries):
+        info = nvmlDeviceGetMemoryInfo(handle)
+        if info.free >= min_memory_available:
+            break
+        print(f"Waiting for {min_memory_available} bytes of free GPU memory. Retrying in {sleep_time} seconds...")
+        time.sleep(sleep_time)
+    else:
+        raise RuntimeError(f"Failed to acquire {min_memory_available} bytes of free GPU memory after {max_retries} retries.")
+
+
+
+min_memory_available = 8*1024*1024*1024 # 8gb memory
 # Loop through folder with the different Neural Networks created for this assignment,implement training and log results in the logs folder:
-for i in range(6):
+for i in range(5):
     subprocess.run(f"python Assignment_02/Step_0{i+1}.py", shell=True)
+    clear_gpu_memory()
+    wait_until_enough_gpu_memory(min_memory_available)
+
+
+
+
+
+
+    
 
 
 

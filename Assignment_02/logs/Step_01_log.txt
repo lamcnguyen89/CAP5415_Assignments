@@ -1,6 +1,0 @@
-2023-10-22 14:51:07 INFO Begin Training MNIST dataset with this model: NN(
-  (fc1): Linear(in_features=784, out_features=100, bias=True)
-  (fc2): Linear(in_features=100, out_features=10, bias=True)
-)
-2023-10-22 14:51:55 INFO Training Epoch: 5, loss = 0.0180
-2023-10-22 14:52:43 INFO Training Epoch: 10, loss = 0.0966

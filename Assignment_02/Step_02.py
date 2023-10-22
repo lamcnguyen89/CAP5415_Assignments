@@ -9,6 +9,10 @@ Next insert two Convolutional Laters to the network built in Step 1.
         c. Train with SGD with a learning rate=0.1, epoch=60, mini-batch size = 10, no regularization
 """
 
+# =======================================================#
+# 1. Import basic Modules and Functions and set variables
+# =======================================================#
+
 import torch
 import torch.nn as nn # All the Neural network models, loss functions
 import torch.optim as optim # Optimization algorithms
@@ -16,6 +20,7 @@ import torch.nn.functional as F # All functions without parameters
 from torch.utils.data import DataLoader # Easier dataset management such as minibatches
 import torchvision.datasets as datasets # Standard datasets that can be used as test training data
 import torchvision.transforms as transforms # Transformations that can be performed on the dataset
+
 
 # Import some packages for logging training and showing progress
 from tqdm_loggable.auto import tqdm
@@ -41,13 +46,13 @@ hidden_size = 100
 num_classes= 10
 learning_rate = 0.1
 batch_size = 10
-num_epochs = 64
+num_epochs = 60
     
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 # ================================================================================#
-# 3a. Next insert two Convolutional Laters to the network built in Step 1 and train
+# 2. Next insert two Convolutional Laters to the network built in previous step:
 # ================================================================================#
 
 class NN_2(nn.Module):
@@ -95,7 +100,7 @@ class NN_2(nn.Module):
 
 
 # =======================================================#
-# 3b. Train the Convolutional Neural:
+# 3. Train the Convolutional Neural Network:
 # =======================================================#
 
 
@@ -169,7 +174,12 @@ for epoch in range(num_epochs):
 
 epoch_counter = 0
 
-# Check Accuracy on training and test to see the accuracy of the model
+
+
+# =========================================================================#
+# 4. Check Accuracy on training and test to see the accuracy of the model:
+# =========================================================================#
+
 def check_accuracy(loader, model):
     if loader.dataset.train:
         print("Checking accuracy on training data")
@@ -185,7 +195,6 @@ def check_accuracy(loader, model):
         for x, y in loader:
             x = x.to(device=device)
             y = y.to(device=device)
-            x = x.reshape(x.shape[0], -1) # Have to reshape data. Why? Let me figure it out.
 
             scores = model(x)
             _,predictions = scores.max(1)
@@ -201,3 +210,4 @@ def check_accuracy(loader, model):
 
 check_accuracy(train_loader,model)
 check_accuracy(test_loader,model)
+

@@ -9,6 +9,10 @@ Add another fully connected (FC) layer.
         
 """
 
+# =======================================================#
+# 1. Import basic Modules and Functions and set variables
+# =======================================================#
+
 import torch
 import torch.nn as nn # All the Neural network models, loss functions
 import torch.optim as optim # Optimization algorithms
@@ -17,6 +21,7 @@ from torch.utils.data import DataLoader # Easier dataset management such as mini
 import torchvision.datasets as datasets # Standard datasets that can be used as test training data
 import torchvision.transforms as transforms # Transformations that can be performed on the dataset
 from tqdm import tqdm # For progress bar
+
 
 # Import some packages for logging training and showing progress
 from tqdm_loggable.auto import tqdm
@@ -30,12 +35,11 @@ logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
-        filename="Assignment_02/Step_04_log.txt" # Save log to a file
+        filename="Assignment_02/logs/Step_04_log.txt" # Save log to a file
     )
 
 tqdm_logging.set_level(logging.INFO)
-tqdm_logging.set_log_rate(datetime.timedelta(seconds=3600))  
-
+ 
 
 # Hyperparameters
 input_channels = 1
@@ -43,18 +47,18 @@ hidden_size = 100
 num_classes= 10
 learning_rate = 0.03
 batch_size = 10
-num_epochs = 64
+num_epochs = 60
     
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
 # ================================================================================#
-# 3a. Next insert two Convolutional Laters to the network built in Step 1 and train
+# 2. Add another fully connected layer into the network created in step 3:
 # ================================================================================#
 
-class NN_2(nn.Module):
+class NN_4(nn.Module):
     def __init__(self,input_channels,hidden_size, num_classes):
-        super(NN_2, self).__init__() # The Super keyword calls the initialization of the parent class
+        super(NN_4, self).__init__() # The Super keyword calls the initialization of the parent class
         
         self.conv1 = nn.Conv2d(in_channels=input_channels,
                                out_channels=40,
@@ -99,7 +103,7 @@ class NN_2(nn.Module):
 
 
 # =======================================================#
-# 3b. Train the Convolutional Neural:
+# 3. Train the Convolutional Neural Network:
 # =======================================================#
 
 
@@ -131,7 +135,7 @@ test_loader = DataLoader(
 )
 
 #Initialize Model
-model = NN_2(
+model = NN_4(
     input_channels=input_channels,
     hidden_size=hidden_size,
     num_classes=num_classes
@@ -175,7 +179,11 @@ for epoch in range(num_epochs):
 
 epoch_counter = 0
 
-# Check Accuracy on training and test to see the accuracy of the model
+
+# =========================================================================#
+# 4. Check Accuracy on training and test to see the accuracy of the model:
+# =========================================================================#
+
 def check_accuracy(loader, model):
     if loader.dataset.train:
         print("Checking accuracy on training data")
@@ -191,7 +199,7 @@ def check_accuracy(loader, model):
         for x, y in loader:
             x = x.to(device=device)
             y = y.to(device=device)
-            x = x.reshape(x.shape[0], -1) # Have to reshape data. Why? Let me figure it out.
+
 
             scores = model(x)
             _,predictions = scores.max(1)
@@ -207,3 +215,5 @@ def check_accuracy(loader, model):
 
 check_accuracy(train_loader,model)
 check_accuracy(test_loader,model)
+
+

@@ -21,6 +21,7 @@ from torch.utils.data import DataLoader # Easier dataset management such as mini
 import torchvision.datasets as datasets # Standard datasets that can be used as test training data
 import torchvision.transforms as transforms # Transformations that can be performed on the dataset
 
+
 # Import some packages for logging training and showing progress
 from tqdm_loggable.auto import tqdm
 from tqdm_loggable.tqdm_logging import tqdm_logging
@@ -45,7 +46,7 @@ hidden_size = 100
 num_classes= 10
 learning_rate = 0.1
 batch_size = 10
-num_epochs = 64
+num_epochs = 60
     
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -185,6 +186,8 @@ def check_accuracy(loader, model):
 
 check_accuracy(train_loader,model)
 check_accuracy(test_loader,model)
+
+
 
 
 
