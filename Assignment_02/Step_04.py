@@ -19,7 +19,7 @@ logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
-        filename="NN_Training_Log_2.log" # Save log to a file
+        filename="Assignment_02/Step_04_log.txt" # Save log to a file
     )
 
 tqdm_logging.set_level(logging.INFO)
@@ -94,7 +94,7 @@ class NN_2(nn.Module):
 
 # Prepare the data for processing through the Network:
 
-train_dataset = datasets.MNIST(root='dataset/', 
+train_dataset = datasets.MNIST(root='Assignment_02/dataset/', 
                train=True, 
                transform=transforms.ToTensor(),
                download=True
@@ -107,7 +107,7 @@ train_loader = DataLoader(
     shuffle = True
 )
 
-test_dataset = datasets.MNIST(root='dataset/', 
+test_dataset = datasets.MNIST(root='Assignment_02/dataset/', 
                train=False, 
                transform=transforms.ToTensor(),
                download=True

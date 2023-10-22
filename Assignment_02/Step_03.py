@@ -1,3 +1,10 @@
+"""
+    3. For the network created in Step 2, replace Sigmoid with ReLU.
+        a. Train the model with a new Learning_rate=0.03.
+
+"""
+
+
 import torch
 import torch.nn as nn # All the Neural network models, loss functions
 import torch.optim as optim # Optimization algorithms
@@ -19,7 +26,7 @@ logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
-        filename="NN_Training_Log_2.log" # Save log to a file
+        filename="Assignment_02/logsStep_03_log.txt" # Save log to a file
     )
 
 tqdm_logging.set_level(logging.INFO)
@@ -89,12 +96,10 @@ class NN_2(nn.Module):
 # 3b. Train the Convolutional Neural:
 # =======================================================#
 
-    
-
 
 # Prepare the data for processing through the Network:
 
-train_dataset = datasets.MNIST(root='dataset/', 
+train_dataset = datasets.MNIST(root='Assignment_02/dataset/', 
                train=True, 
                transform=transforms.ToTensor(),
                download=True
@@ -107,7 +112,7 @@ train_loader = DataLoader(
     shuffle = True
 )
 
-test_dataset = datasets.MNIST(root='dataset/', 
+test_dataset = datasets.MNIST(root='Assignment_03/dataset/', 
                train=False, 
                transform=transforms.ToTensor(),
                download=True

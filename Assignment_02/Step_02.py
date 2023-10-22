@@ -1,3 +1,10 @@
+"""
+2. Next insert two Convolutional Laters to the network built in Step 1. 
+        a. For each CNN layer, include a pooling layer and Sigmoid Activation. 
+        b. Pool over 2x2 regions, 40 kernels, stride=1, kernel_size=5x5.
+        c. Train with SGD with a learning rate=0.1, epoch=60, mini-batch size = 10, no regularization
+"""
+
 import torch
 import torch.nn as nn # All the Neural network models, loss functions
 import torch.optim as optim # Optimization algorithms
@@ -19,7 +26,7 @@ logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
-        filename="NN_Training_Log_2.log" # Save log to a file
+        filename="Assignment_02/logs/Step_02_log.txt" # Save log to a file
     )
 
 tqdm_logging.set_level(logging.INFO)
@@ -60,7 +67,6 @@ class NN_2(nn.Module):
         self.pool = nn.MaxPool2d(kernel_size=(2,2),
                                   stride=(2,2)
         ) 
-        #self.fc1=nn.Linear(40*7*7, num_classes)
         self.fc1 = nn.Linear(40*4*4, hidden_size) 
         self.fc2 = nn.Linear(hidden_size, num_classes)
 
@@ -90,12 +96,10 @@ class NN_2(nn.Module):
 # 3b. Train the Convolutional Neural:
 # =======================================================#
 
-    
-
 
 # Prepare the data for processing through the Network:
 
-train_dataset = datasets.MNIST(root='dataset/', 
+train_dataset = datasets.MNIST(root='Assignment_02/dataset/', 
                train=True, 
                transform=transforms.ToTensor(),
                download=True
@@ -108,7 +112,7 @@ train_loader = DataLoader(
     shuffle = True
 )
 
-test_dataset = datasets.MNIST(root='dataset/', 
+test_dataset = datasets.MNIST(root='Assignment_02/dataset/', 
                train=False, 
                transform=transforms.ToTensor(),
                download=True

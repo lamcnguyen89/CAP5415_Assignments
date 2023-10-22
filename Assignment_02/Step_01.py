@@ -88,7 +88,7 @@ logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
-        filename="NN_Training_Log.log" # Save log to a file
+        filename="Assignment_02/logs/Step_01_log.txt" # Save log to a file
     )
 
 tqdm_logging.set_level(logging.INFO)
@@ -132,7 +132,7 @@ class NN(nn.Module):
 
 # Prepare the data for processing through the Network:
 
-train_dataset = datasets.MNIST(root='dataset/', 
+train_dataset = datasets.MNIST(root='Assignment_02/dataset/', 
                train=True, 
                transform=transforms.ToTensor(),
                download=True
@@ -145,7 +145,7 @@ train_loader = DataLoader(
     shuffle = True
 )
 
-test_dataset = datasets.MNIST(root='dataset/', 
+test_dataset = datasets.MNIST(root='Assignment_02/dataset/', 
                train=False, 
                transform=transforms.ToTensor(),
                download=True
@@ -181,7 +181,6 @@ for epoch in range(num_epochs):
         # But for a fully connected, we need to have a shape (10,784)
         # 10 is the number of batches
         images = images.reshape(-1,28*28)
-        print(images.size())
 
         images = images.to(device=device) # Images
         labels = labels.to(device=device) # label that classifies image
@@ -247,38 +246,7 @@ check_accuracy(test_loader,model)
 # 3. Next insert two Convolutional Laters to the network built in Step 1 and train
 # ================================================================================#
 
-class NN_2(nn.Module):
-    def __init__(self,input_size, num_classes):
-        super(NN_2, self).__init__() # The Super keyword calls the initialization of the parent class
-        self.fc1 = nn.Linear(input_size, 100) # Create a small NN
-        self.fc2 = nn.Linear(100, num_classes)
-        self.conv1 = nn.Conv2d(in_channels=num_classes,
-                               out_channels=8,
-                               kernel_size=(3,3),
-                               stride=(1,1),
-                               padding=0
-                               )
-        self.pool1 = nn.MaxPool2d(kernel_size=(2,2),
-                                  stride=(2,2)
-        ) 
-        self.conv2 = nn.Conv2d(in_channels=8,
-                               out_channels=8,
-                               kernel_size=(3,3),
-                               stride=(1,1),
-                               padding=0
-                               ) 
-        self.pool2 = nn.MaxPool2d(kernel_size=(2,2),
-                                  stride=(2,2)
-        )
 
-    def forward(self, x):
-        x = F.sigmoid(self.fc1(x))
-        x = F.sigmoid(self.conv1(x))
-        x = self.pool1(x)
-        x = F.sigmoid(self.conv2(x))
-        x = self.pool2(x)
-        x = self.fc2(x)
-        return x
 
 
 # ================================================================================#

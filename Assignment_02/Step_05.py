@@ -1,3 +1,8 @@
+"""
+    5. Change the neuron numbers in FC layers from 100 to 1000.
+        a. Train layer with SGD. Use dropout with a rate=0.5 and 40 epochs
+"""
+
 import torch
 import torch.nn as nn # All the Neural network models, loss functions
 import torch.optim as optim # Optimization algorithms
@@ -19,7 +24,7 @@ logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
-        filename="NN_Training_Log_2.log" # Save log to a file
+        filename="Assignment_02/Step_05_log.txt" # Save log to a file
     )
 
 tqdm_logging.set_level(logging.INFO)
@@ -33,6 +38,7 @@ num_classes= 10
 learning_rate = 0.03
 batch_size = 10
 num_epochs = 40
+dropout_rate=0.5
     
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -60,7 +66,7 @@ class NN_2(nn.Module):
         self.pool = nn.MaxPool2d(kernel_size=(2,2),
                                   stride=(2,2)
         ) 
-        self.drop=nn.Dropout(0.5)
+        self.drop=nn.Dropout(dropout_rate)
         self.fc1 = nn.Linear(40*4*4, hidden_size)
         self.fc2 = nn.Linear(hidden_size,hidden_size) 
         self.fc3 = nn.Linear(hidden_size, num_classes)
@@ -96,7 +102,7 @@ class NN_2(nn.Module):
 
 # Prepare the data for processing through the Network:
 
-train_dataset = datasets.MNIST(root='dataset/', 
+train_dataset = datasets.MNIST(root='Assignment_02/dataset/', 
                train=True, 
                transform=transforms.ToTensor(),
                download=True
@@ -109,7 +115,7 @@ train_loader = DataLoader(
     shuffle = True
 )
 
-test_dataset = datasets.MNIST(root='dataset/', 
+test_dataset = datasets.MNIST(root='Assignment_02/dataset/', 
                train=False, 
                transform=transforms.ToTensor(),
                download=True
