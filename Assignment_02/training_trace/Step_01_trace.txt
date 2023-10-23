@@ -1,0 +1,19 @@
+2023-10-22 19:36:58 INFO Begin Training MNIST dataset with this model: NN(
+  (fc1): Linear(in_features=784, out_features=100, bias=True)
+  (fc2): Linear(in_features=100, out_features=10, bias=True)
+)
+2023-10-22 19:37:20 INFO Training Epoch: 5, loss = 0.0025
+2023-10-22 19:37:42 INFO Training Epoch: 10, loss = 0.0223
+2023-10-22 19:38:04 INFO Training Epoch: 15, loss = 0.0016
+2023-10-22 19:38:26 INFO Training Epoch: 20, loss = 0.0070
+2023-10-22 19:38:48 INFO Training Epoch: 25, loss = 0.0259
+2023-10-22 19:39:11 INFO Training Epoch: 30, loss = 0.0159
+2023-10-22 19:39:32 INFO Training Epoch: 35, loss = 0.0006
+2023-10-22 19:39:55 INFO Training Epoch: 40, loss = 0.0116
+2023-10-22 19:40:16 INFO Training Epoch: 45, loss = 0.0002
+2023-10-22 19:40:38 INFO Training Epoch: 50, loss = 0.0078
+2023-10-22 19:41:00 INFO Training Epoch: 55, loss = 0.0027
+2023-10-22 19:41:22 INFO Checking accuracy on training data
+2023-10-22 19:41:24 INFO Got 60000 / 60000 with accuracy 100.00
+2023-10-22 19:41:24 INFO Checking accuracy on test data
+2023-10-22 19:41:24 INFO Got 9791 / 10000 with accuracy 97.91

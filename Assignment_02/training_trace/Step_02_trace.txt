@@ -1,0 +1,22 @@
+2023-10-22 19:41:25 INFO Begin Training MNIST dataset with this model: NN_2(
+  (conv1): Conv2d(1, 40, kernel_size=(5, 5), stride=(1, 1))
+  (conv2): Conv2d(40, 40, kernel_size=(5, 5), stride=(1, 1))
+  (pool): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+  (fc1): Linear(in_features=640, out_features=100, bias=True)
+  (fc2): Linear(in_features=100, out_features=10, bias=True)
+)
+2023-10-22 19:41:56 INFO Training Epoch: 5, loss = 0.0027
+2023-10-22 19:42:25 INFO Training Epoch: 10, loss = 0.0121
+2023-10-22 19:42:55 INFO Training Epoch: 15, loss = 0.0294
+2023-10-22 19:43:25 INFO Training Epoch: 20, loss = 0.0000
+2023-10-22 19:43:55 INFO Training Epoch: 25, loss = 0.0002
+2023-10-22 19:44:25 INFO Training Epoch: 30, loss = 0.0001
+2023-10-22 19:44:54 INFO Training Epoch: 35, loss = 0.0003
+2023-10-22 19:45:24 INFO Training Epoch: 40, loss = 0.0019
+2023-10-22 19:45:54 INFO Training Epoch: 45, loss = 0.0000
+2023-10-22 19:46:23 INFO Training Epoch: 50, loss = 0.0002
+2023-10-22 19:46:53 INFO Training Epoch: 55, loss = 0.0001
+2023-10-22 19:47:23 INFO Checking accuracy on training data
+2023-10-22 19:47:26 INFO Got 59999 / 60000 with accuracy 100.00
+2023-10-22 19:47:26 INFO Checking accuracy on test data
+2023-10-22 19:47:26 INFO Got 9907 / 10000 with accuracy 99.07
