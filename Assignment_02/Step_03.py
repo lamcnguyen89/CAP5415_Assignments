@@ -33,7 +33,7 @@ logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
-        filename="Assignment_02/training_trace/Step_03_trace.txt" # Save log to a file
+        filename="Assignment_02/output/Step_03_trace.txt" # Save log to a file
     )
 
 tqdm_logging.set_level(logging.INFO)

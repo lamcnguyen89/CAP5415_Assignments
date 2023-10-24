@@ -3,7 +3,7 @@ Programming Assignment_02: Convolutional NNs
 
 Step 02:
 
-Next insert two Convolutional Laters to the network built in Step 1. 
+Next insert two Convolutional Layers to the network built in Step 1. 
         a. For each CNN layer, include a pooling layer and Sigmoid Activation. 
         b. Pool over 2x2 regions, 40 kernels, stride=1, kernel_size=5x5.
         c. Train with SGD with a learning rate=0.1, epoch=60, mini-batch size = 10, no regularization
@@ -34,7 +34,7 @@ logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
-        filename="Assignment_02/training_trace/Step_02_trace.txt" # Save log to a file
+        filename="Assignment_02/output/Step_02_trace.txt" # Save log to a file
     )
 
 tqdm_logging.set_level(logging.INFO)
