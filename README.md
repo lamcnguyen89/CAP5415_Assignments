@@ -7,3 +7,7 @@ Create a Canny Image Detection Algorithm to filter a image so that ideally, only
 
 ## Assignment 02: Convolutional Neural Network
 Create a Convolutional Neural Network for Digit Classification
+
+## Assignment 03: Autoencoder and Nearest Neighbor Classification
+Create an Auto Encoder. Also do Nearest Neighbor Classification
+
