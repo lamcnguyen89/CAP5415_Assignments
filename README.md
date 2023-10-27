@@ -11,3 +11,6 @@ Create a Convolutional Neural Network for Digit Classification
 ## Assignment 03: Autoencoder and Nearest Neighbor Classification
 Create an Auto Encoder. Also do Nearest Neighbor Classification
 
+
+## Course Project: 2D Image to 3D Model
+Create model to convert a single 2D image to a 3D Model
