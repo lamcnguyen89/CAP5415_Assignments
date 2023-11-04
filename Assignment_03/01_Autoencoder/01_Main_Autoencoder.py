@@ -44,6 +44,62 @@ Note that you can choose any optimizer. Just use the same for both variations
 
 Sources:
 
+Autoencoder in Pytorch-Theory and Implementation by Patrick Loeber: https://www.youtube.com/watch?v=zp8clK9yCro
+
+
 
 
 """
+
+import torch
+import torch.optim as optim # Optimization algorithms
+import torch.nn.functional as F # All functions without parameters
+import torchvision.datasets as datasets # Standard datasets that can be used as test training data
+from torch.utils.data import DataLoader
+import torchvision.transforms as transforms # Transformations that can be performed on the dataset
+import matplotlib.pyplot as plt
+
+# Import some packages for logging training and showing progress
+from tqdm_loggable.auto import tqdm
+
+# Hyperparameters
+input_size = 28*28
+hidden_size = 100
+num_classes= 10
+learning_rate = 0.1
+batch_size = 64
+num_epochs = 10
+    
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+
+# =======================================================#
+# 1. Import Data:
+# =======================================================#
+
+train_dataset = datasets.MNIST(root='Assignment_03/MNIST_dataset/', 
+               train=True, 
+               transform=transforms.ToTensor(),
+               download=True
+               )#Transforms transforms numpy array to tensors so that pytorch can use the data
+
+
+train_loader = DataLoader(
+    dataset = train_dataset,
+    batch_size = batch_size,
+    shuffle = True
+)
+
+test_dataset = datasets.MNIST(root='Assignment_03/MNIST_dataset/', 
+               train=False, 
+               transform=transforms.ToTensor(),
+               download=True
+               )#Transforms transforms numpy array to tensors so that pytorch can use the data
+
+test_loader = DataLoader(
+    dataset= test_dataset,
+    batch_size = batch_size,
+    shuffle = True
+)
+
+
