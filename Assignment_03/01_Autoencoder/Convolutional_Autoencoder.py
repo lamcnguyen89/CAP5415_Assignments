@@ -1,22 +1,55 @@
 """
 
-1. Implement an autoencoder using fully connected layers. 
-    a. The encoder will have 2 layers (with 256, and 128 neurons)
-    b. The decoder will have 2 layers (with 256 and 784 neurons)
-    c. Train this network using MSE loss for 10 epochs
-    d. Compare the number of parameters  in the encoder and decoder.
-    e. Create a writeup:
-        i. Show 20 reconstructed images from testing data (2 image for each class)
-        ii. Show original images
+2. Implement an autoencoder using Convolutional layers. 
+    a. The encoder will have 2 convolutional layers and 2 max pooling layers
+        i. Use kernel size 3x3
+        ii. reLU activation
+        iii. padding of 1 to preserve the feature map.
+    b. The decoder will have 3 convolutional layers
+        i. kernel shape is 3x3
+        ii. padding = 1
+        iii. The first 3 convolutional layers will be followed by an upsampling layer.
+                a. This upsampling layer will double the resolution of the feature maps using linear interpolation
+    c. Train the network for 10 epochs
+    d. Compare the number of parameters in the encoder and decoder.
+    e. Compare the total parameters in this autoencoder with the previous autoencoder.
+    f. Create Writeup:
+        i. Show 20 sample reconstructed images from testing data (2 images for each class)
+        ii. show original images
+        iii. Compare the reconstructed results with the previous autoencoder
 
 """
 
 import torch.nn as nn # All the Neural network models, loss functions
 
-class Autoencoder(nn.Module):
+class CNN_Autoencoder(nn.Module):
 
-    def __init__(self):
-        pass
+    def __init__(self,input_size):
+        self.encoder = nn.Sequential(
+            nn.Conv2d(in_channels=input_size,
+                        out_channels=40,
+                        kernel_size=(3,3),
+                        stride=(1,1),
+                        padding=(1,1)
+                   ),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=(2,2),
+                            stride=(2,2)),
+            nn.Conv2d(in_channels=40,
+                        out_channels=40,
+                        kernel_size=(3,3),
+                        stride=(1,1),
+                        padding=(1,1)
+                   ),
+            nn.MaxPool2d(kernel_size=(2,2),
+                            stride=(2,2))
+        )
+
+        self.decoder = nn.Sequential(
+
+        )
 
     def forward(self, x):
-        pass
+        x = self.encoder(x)
+        x = self.decoder(x)
+        return x
