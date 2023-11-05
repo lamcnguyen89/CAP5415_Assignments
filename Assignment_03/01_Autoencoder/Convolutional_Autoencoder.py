@@ -24,52 +24,28 @@ import torch.nn as nn # All the Neural network models, loss functions
 
 class CNN_Autoencoder(nn.Module):
 
-    def __init__(self,input_size):
+    def __init__(self):
         super().__init__()
+        # N, 1, 28, 28
         self.encoder = nn.Sequential(
-            nn.Conv2d(in_channels=input_size,
-                        out_channels=40,
-                        kernel_size=(3,3),
-                        stride=(1,1),
-                        padding=(1,1)
-                   ),
+            nn.Conv2d(1, 16, 3, stride=2, padding=1), # -> N, 16, 14, 14
             nn.ReLU(),
-            nn.MaxPool2d(kernel_size=(2,2),
-                            stride=(2,2)),
-            nn.Conv2d(in_channels=40,
-                        out_channels=40,
-                        kernel_size=(3,3),
-                        stride=(1,1),
-                        padding=(1,1)
-                   ),
-            nn.MaxPool2d(kernel_size=(2,2),
-                            stride=(2,2))
+            nn.Conv2d(16, 32, 3, stride=2, padding=1), # -> N, 32, 7, 7
+            nn.ReLU(),
+            nn.Conv2d(32, 64, 7) # -> N, 64, 1, 1
         )
-
+        
+        # N , 64, 1, 1
+        # You want to play around with the hyperparameters in order to get the same output dimentsions as the input dimensions.
         self.decoder = nn.Sequential(
-            nn.Conv2d(in_channels=input_size,
-                        out_channels=40,
-                        kernel_size=(3,3),
-                        stride=(1,1),
-                        padding=(1,1)
-                   ),
-            nn.Upsample(scale_factor=2),
-            nn.Conv2d(in_channels=input_size,
-                        out_channels=40,
-                        kernel_size=(3,3),
-                        stride=(1,1),
-                        padding=(1,1)
-                   ),
-            nn.Upsample(scale_factor=2),
-            nn.Conv2d(in_channels=input_size,
-                        out_channels=40,
-                        kernel_size=(3,3),
-                        stride=(1,1),
-                        padding=(1,1)
-                   ),
-            nn.Upsample(scale_factor=2),
-
+            nn.ConvTranspose2d(64, 32, 7), # -> N, 32, 7, 7
+            nn.ReLU(),
+            nn.ConvTranspose2d(32, 16, 3, stride=2, padding=1, output_padding=1), # N, 16, 14, 14 (N,16,13,13 without output_padding)
+            nn.ReLU(),
+            nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1, output_padding=1), # N, 1, 28, 28  (N,1,27,27)
+            nn.Sigmoid()
         )
+
 
     def forward(self, x):
         x = self.encoder(x)

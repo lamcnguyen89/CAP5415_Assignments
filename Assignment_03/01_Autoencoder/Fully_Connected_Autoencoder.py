@@ -18,24 +18,17 @@ class FCC_Autoencoder(nn.Module):
     def __init__(self,input_size):
         super().__init__()
         self.encoder = nn.Sequential(
-            nn.Linear(in_features=input_size, out_features=128),
+            nn.Linear(in_features=input_size, out_features=256),
             nn.ReLU(),
-            nn.Linear(in_features=128,out_features=64),
-            nn.ReLU(),
-            nn.Linear(64,12),
-            nn.ReLU(),
-            nn.Linear(12,3)
+            nn.Linear(in_features=256,out_features=128),
+
 
         )
 
         self.decoder = nn.Sequential(
-            nn.Linear(3,12),
+            nn.Linear(128,256),
             nn.ReLU(),
-            nn.Linear(12,64),
-            nn.ReLU(),
-            nn.Linear(64,128),
-            nn.ReLU(),
-            nn.Linear(128,input_size),
+            nn.Linear(256,input_size),
             nn.Sigmoid()
         )
 
