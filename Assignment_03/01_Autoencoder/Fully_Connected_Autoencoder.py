@@ -16,16 +16,26 @@ import torch.nn as nn # All the Neural network models, loss functions
 class FCC_Autoencoder(nn.Module):
 
     def __init__(self,input_size):
+        super().__init__()
         self.encoder = nn.Sequential(
-            nn.Linear(in_features=input_size, out_features=256),
+            nn.Linear(in_features=input_size, out_features=128),
             nn.ReLU(),
-            nn.Linear(in_features=256,out_features=128)
+            nn.Linear(in_features=128,out_features=64),
+            nn.ReLU(),
+            nn.Linear(64,12),
+            nn.ReLU(),
+            nn.Linear(12,3)
+
         )
 
         self.decoder = nn.Sequential(
-            nn.Linear(in_features=128, out_features=256),
+            nn.Linear(3,12),
             nn.ReLU(),
-            nn.Linear(in_features=256,out_features=input_size),
+            nn.Linear(12,64),
+            nn.ReLU(),
+            nn.Linear(64,128),
+            nn.ReLU(),
+            nn.Linear(128,input_size),
             nn.Sigmoid()
         )
 
@@ -33,3 +43,6 @@ class FCC_Autoencoder(nn.Module):
         x = self.encoder(x)
         x = self.decoder(x)
         return x
+    
+# Note: If images are in the range (-1,1) apply Tanh() activation instead of sigmoid
+

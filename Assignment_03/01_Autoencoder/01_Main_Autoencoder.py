@@ -57,7 +57,7 @@ import torch.nn.functional as F # All functions without parameters
 import torchvision.datasets as datasets # Standard datasets that can be used as test training data
 from torch.utils.data import DataLoader
 import torchvision.transforms as transforms # Transformations that can be performed on the dataset
-import matplotlib.pyplot as plt
+import torch.nn as nn
 
 # Import some packages for logging training and showing progress
 from tqdm_loggable.auto import tqdm
@@ -69,6 +69,7 @@ num_classes= 10
 learning_rate = 0.1
 batch_size = 64
 num_epochs = 10
+weight_decay = 1e-5
     
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -90,16 +91,52 @@ train_loader = DataLoader(
     shuffle = True
 )
 
-test_dataset = datasets.MNIST(root='Assignment_03/MNIST_dataset/', 
-               train=False, 
-               transform=transforms.ToTensor(),
-               download=True
-               )#Transforms transforms numpy array to tensors so that pytorch can use the data
 
-test_loader = DataLoader(
-    dataset= test_dataset,
-    batch_size = batch_size,
-    shuffle = True
-)
+
+# =======================================================#
+# 2. Import Autoencoder model and set things up.
+# =======================================================#
+
+
+from Fully_Connected_Autoencoder import FCC_Autoencoder
+
+model = FCC_Autoencoder(input_size=input_size)
+criterion = nn.MSELoss()
+optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
+
+# =======================================================#
+# 3. Train
+# =======================================================#
+image_array = []
+
+for epoch in range(num_epochs):
+    for batch_idx, (images, _) in enumerate(tqdm(train_loader)):
+        
+        # Get data to Cuda/gpu if possible. Data is the tuple of the images and labels
+        # We have to reshape images because they are (10,1,28,28) when input into the network.
+        # But for a fully connected, we need to have a shape (10,784)
+        # 10 is the number of batches
+        images = images.reshape(-1,28*28)
+
+        images = images.to(device=device) # Images
+       # labels = labels.to(device=device) # label that classifies image
+
+        # Forward
+        outputs = model(images)
+        loss = criterion(outputs, images) # Predicted outputs vs actual labels
+
+        # Go Backward in the network:
+        optimizer.zero_grad() # Empty the values in the gradient attribute
+        loss.backward() # Backpropagation
+
+        # gradient descent or adam step
+        optimizer.step() # Update parameters
+        tqdm.write(f'Epoch:{epoch +1}, Loss:{loss.item():.4f}')
+        image_array.append((epoch,images,outputs))
+
+
+
+        
+
 
 

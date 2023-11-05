@@ -25,6 +25,7 @@ import torch.nn as nn # All the Neural network models, loss functions
 class CNN_Autoencoder(nn.Module):
 
     def __init__(self,input_size):
+        super().__init__()
         self.encoder = nn.Sequential(
             nn.Conv2d(in_channels=input_size,
                         out_channels=40,
@@ -46,6 +47,27 @@ class CNN_Autoencoder(nn.Module):
         )
 
         self.decoder = nn.Sequential(
+            nn.Conv2d(in_channels=input_size,
+                        out_channels=40,
+                        kernel_size=(3,3),
+                        stride=(1,1),
+                        padding=(1,1)
+                   ),
+            nn.Upsample(scale_factor=2),
+            nn.Conv2d(in_channels=input_size,
+                        out_channels=40,
+                        kernel_size=(3,3),
+                        stride=(1,1),
+                        padding=(1,1)
+                   ),
+            nn.Upsample(scale_factor=2),
+            nn.Conv2d(in_channels=input_size,
+                        out_channels=40,
+                        kernel_size=(3,3),
+                        stride=(1,1),
+                        padding=(1,1)
+                   ),
+            nn.Upsample(scale_factor=2),
 
         )
 
