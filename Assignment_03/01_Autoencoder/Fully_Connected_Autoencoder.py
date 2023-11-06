@@ -22,11 +22,20 @@ import torch.nn.functional as F # All functions without parameters
 from torch.utils.data import DataLoader # Easier dataset management such as minibatches
 import torchvision.datasets as datasets # Standard datasets that can be used as test training data
 import torchvision.transforms as transforms # Transformations that can be performed on the dataset
-from torchinfo import summary
+from torchinfo import summary # provides a summary of the model architecture and it's parameters
+import logging
 
 # Import some packages for logging training and showing progress
 from tqdm_loggable.auto import tqdm
 from tqdm_loggable.tqdm_logging import tqdm_logging
+
+# Set up some basic logging to record traces of training
+logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        filename="Assignment_03/01_Autoencoder/Autoencoder_Documents/Autoencoder_Parameter_Summary.txt" # Save log to a file
+    )
 
 
 # Hyperparameters
@@ -45,7 +54,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # 2. Import Data:
 # =======================================================#
 
-train_dataset = datasets.MNIST(root='Assignment_03/MNIST_dataset/', 
+train_dataset = datasets.MNIST(root='Assignment_03/01_Autoencoder/MNIST_dataset/', 
                train=True, 
                transform=transforms.ToTensor(),
                download=True
@@ -92,7 +101,7 @@ class FCC_Autoencoder(nn.Module):
 
 
 # =======================================================#
-# 3. Train Fully Connected Autoencoder
+# 4. Train Fully Connected Autoencoder
 # =======================================================#
 
 model = FCC_Autoencoder(input_size=input_size).to(device)
@@ -102,6 +111,7 @@ optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight
 
 image_array = []
 
+print("Beginning the training of the Fully Connected Autoencoder")
 for epoch in range(num_epochs):
     tqdm.write(f'Epoch:{epoch +1}')
     for batch_idx, (images, _) in enumerate(tqdm(train_loader)):
@@ -128,3 +138,18 @@ for epoch in range(num_epochs):
         image_array.append((epoch,images,outputs))
 
 
+# =======================================================#
+# 5. Get the number of parameters for the FC-Autoencoder:
+# =======================================================#
+
+FCC_Autoencoder_summary = summary(model)
+
+logging.info(FCC_Autoencoder_summary)
+
+
+# =======================================================#
+# 6. Save the trained Fully Connected Autoencoder
+# =======================================================#
+
+print("Saving the Fully Connected Autoencoder Model to the folder: Assignment_03/01_Autoencoder/Trained_Autoencoders")
+torch.save(model.state_dict(),'Assignment_03/01_Autoencoder/Trained_Autoencoders/FCC_Autoencoder_Model.pth')

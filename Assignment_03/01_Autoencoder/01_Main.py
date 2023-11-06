@@ -48,15 +48,21 @@ Autoencoder in Pytorch-Theory and Implementation by Patrick Loeber: https://www.
 
 How to get info on model parameters using Torchinfo: https://pypi.org/project/torchinfo/
 
+How to save trained model: https://wandb.ai/wandb/common-ml-errors/reports/How-to-Save-and-Load-Models-in-PyTorch--VmlldzozMjg0MTE
+
+
 
 
 
 """
-
 # ========================================================================================#
-# 1. Create and Train the Convolutional Autoencoder and Fully Connected Autoencoder Models
+# 1. Load Modules
 # ========================================================================================#
 
+
+from Convolutional_Autoencoder import CNN_Autoencoder
+from Fully_Connected_Autoencoder import FCC_Autoencoder
+from torchinfo import summary
 import subprocess
 import torch
 import gc
@@ -64,7 +70,13 @@ from pynvml import nvmlInit, nvmlDeviceGetHandleByIndex, nvmlDeviceGetMemoryInfo
 import time
 
 
+# Load GPU Parameters
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 min_memory_available = 8*1024*1024*1024 # 8gb memory
+
+# ========================================================================================#
+# 2. Create and Train the Convolutional Autoencoder and Fully Connected Autoencoder Models
+# ========================================================================================#
 
 
 # Clear GPU memory after Training Each Model
@@ -89,39 +101,24 @@ def wait_until_enough_gpu_memory(min_memory_available, max_retries=10, sleep_tim
     
 
 
-# # Run the different Models
-# subprocess.run(f"python Autoencoder/Fully_Connected_Autoencoder.py", shell=True)
-# clear_gpu_memory()
-# wait_until_enough_gpu_memory(min_memory_available)
+# Run the different Models
+subprocess.run(f"python Assignment_03/01_Autoencoder/Fully_Connected_Autoencoder.py", shell=True)
+clear_gpu_memory()
+wait_until_enough_gpu_memory(min_memory_available)
 
-# subprocess.run(f"python Autoencoder/Convolutional_Autoencoder.py", shell=True)
-# clear_gpu_memory()
-# wait_until_enough_gpu_memory(min_memory_available)
+subprocess.run(f"python Assignment_03/01_Autoencoder/Convolutional_Autoencoder.py", shell=True)
+clear_gpu_memory()
+wait_until_enough_gpu_memory(min_memory_available)
+
 
 
 
 # ========================================================================================#
-# 2. Get the number of parameters for the FC-Autoencoder and the CNN-Autoencoder:
+# 3. Use the trained model to make predictions of the 10 classes in the MNIST Dataset:
 # ========================================================================================#
 
-from Convolutional_Autoencoder import CNN_Autoencoder
-from Fully_Connected_Autoencoder import FCC_Autoencoder
-from torchinfo import summary
-import logging
 
-
-# Set up some basic logging to record traces of training
-logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s %(levelname)s %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S",
-        filename="Assignment_03/01_Autoencoder/Autoencoder_Documents/Autoencoder_Parameter_Summary.txt" # Save log to a file
-    )
-
-# Load the models to the GPU if available
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-batch_size = 64
+# Load an instance of the trained model and load the saved parameters that were previously trained
 
 #Image Dimensions from the MNIST Dataset
 channels = 1
@@ -129,20 +126,20 @@ height =28
 width = 28
 
 # Create an instance of the models
-fcc_model = FCC_Autoencoder(input_size= (height*width)).to(device)
+fcc_model = FCC_Autoencoder(input_size= (height*width*channels)).to(device)
 cnn_model = CNN_Autoencoder().to(device)
 
-FCC_Autoencoder_summary = summary(fcc_model, input_size=(batch_size,height*width))
-CNN_Autoencoder_summary = summary(cnn_model, input_size=(batch_size,channels,height,width))
+
+# Load the saved parameters
+fcc_model.load_state_dict(torch.load('Assignment_03/01_Autoencoder/Trained_Autoencoders/FCC_Autoencoder_Model.pth'))
+cnn_model.load_state_dict(torch.load('Assignment_03/01_Autoencoder/Trained_Autoencoders/CNN_Autoencoder_Model.pth'))
 
 
-print(FCC_Autoencoder_summary)
-logging.info(FCC_Autoencoder_summary)
-print(CNN_Autoencoder_summary)
-logging.info(CNN_Autoencoder_summary)
+# Get the images (two from each classifier) and load them into a Tensor
 
+# Push the tensor through the trained model and save them to a numpy array
 
-
+# Save the images in the numpy array to a folder.
 
 
 

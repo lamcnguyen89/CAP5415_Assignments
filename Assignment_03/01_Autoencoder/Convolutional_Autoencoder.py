@@ -31,11 +31,22 @@ import torch.nn.functional as F # All functions without parameters
 from torch.utils.data import DataLoader # Easier dataset management such as minibatches
 import torchvision.datasets as datasets # Standard datasets that can be used as test training data
 import torchvision.transforms as transforms # Transformations that can be performed on the dataset
+from torchinfo import summary # provides a summary of the model architecture and it's parameters
+import logging
 
 
 # Import some packages for logging training and showing progress
 from tqdm_loggable.auto import tqdm
 from tqdm_loggable.tqdm_logging import tqdm_logging
+
+
+# Set up some basic logging to record traces of training
+logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        filename="Assignment_03/01_Autoencoder/Autoencoder_Documents/Autoencoder_Parameter_Summary.txt" # Save log to a file
+    )
 
 
 # Hyperparameters
@@ -129,6 +140,7 @@ optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight
 
 image_array = []
 
+print("Beginning the training of the Convolutional Autoencoder")
 for epoch in range(num_epochs):
     tqdm.write(f'Epoch:{epoch +1}')
     for batch_idx, (images, _) in enumerate(tqdm(train_loader)):
@@ -153,3 +165,22 @@ for epoch in range(num_epochs):
         # gradient descent or adam step
         optimizer.step() # Update parameters
         image_array.append((epoch,images,outputs))
+
+
+
+# =======================================================#
+# 5. Get the number of parameters for the CNN-Autoencoder:
+# =======================================================#
+
+CNN_Autoencoder_summary = summary(model)
+
+print(CNN_Autoencoder_summary)
+logging.info(CNN_Autoencoder_summary)
+
+
+# =======================================================#
+# 6. Save the trained Convolutional Autoencoder
+# =======================================================#
+
+print("Saving the Convolutional Autoencoder Model to the folder: Assignment_03/01_Autoencoder/Trained_Autoencoders")
+torch.save(model.state_dict(),'Assignment_03/01_Autoencoder/Trained_Autoencoders/CNN_Autoencoder_Model.pth')
