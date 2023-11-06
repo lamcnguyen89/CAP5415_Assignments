@@ -46,6 +46,8 @@ Sources:
 
 Autoencoder in Pytorch-Theory and Implementation by Patrick Loeber: https://www.youtube.com/watch?v=zp8clK9yCro
 
+How to get info on model parameters using Torchinfo: https://pypi.org/project/torchinfo/
+
 
 
 
