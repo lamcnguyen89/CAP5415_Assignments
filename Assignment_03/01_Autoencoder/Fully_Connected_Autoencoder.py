@@ -22,7 +22,7 @@ import torch.nn.functional as F # All functions without parameters
 from torch.utils.data import DataLoader # Easier dataset management such as minibatches
 import torchvision.datasets as datasets # Standard datasets that can be used as test training data
 import torchvision.transforms as transforms # Transformations that can be performed on the dataset
-
+from torchinfo import summary
 
 # Import some packages for logging training and showing progress
 from tqdm_loggable.auto import tqdm
@@ -95,7 +95,7 @@ class FCC_Autoencoder(nn.Module):
 # 3. Train Fully Connected Autoencoder
 # =======================================================#
 
-model = FCC_Autoencoder(input_size=input_size)
+model = FCC_Autoencoder(input_size=input_size).to(device)
 criterion = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 
@@ -126,3 +126,5 @@ for epoch in range(num_epochs):
         # gradient descent or adam step
         optimizer.step() # Update parameters
         image_array.append((epoch,images,outputs))
+
+

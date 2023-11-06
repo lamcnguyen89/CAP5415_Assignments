@@ -55,7 +55,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # 2. Import Data:
 # =======================================================#
 
-train_dataset = datasets.MNIST(root='Assignment_03/MNIST_dataset/', 
+train_dataset = datasets.MNIST(root='Assignment_03/01_Autoencoder/MNIST_dataset/', 
                train=True, 
                transform=transforms.ToTensor(),
                download=True
@@ -121,7 +121,7 @@ class CNN_Autoencoder(nn.Module):
 # 4. Train Covolutional Autoencoder:
 # =======================================================#
 
-model = CNN_Autoencoder()
+model = CNN_Autoencoder().to(device)
 criterion = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 
