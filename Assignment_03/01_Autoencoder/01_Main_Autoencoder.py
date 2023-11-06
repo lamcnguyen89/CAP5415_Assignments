@@ -93,46 +93,46 @@ train_loader = DataLoader(
 
 
 
-# # =======================================================#
-# # 2. Import FC-Autoencoder model and set things up.
-# # =======================================================#
+# =======================================================#
+# 2. Import FC-Autoencoder model and set things up.
+# =======================================================#
 
 
-# from Fully_Connected_Autoencoder import FCC_Autoencoder
+from Fully_Connected_Autoencoder import FCC_Autoencoder
 
-# model = FCC_Autoencoder(input_size=input_size)
-# criterion = nn.MSELoss()
-# optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
+model = FCC_Autoencoder(input_size=input_size)
+criterion = nn.MSELoss()
+optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 
-# # =======================================================#
-# # 3. Train Fully Connected Autoencoder
-# # =======================================================#
-# image_array = []
+# =======================================================#
+# 3. Train Fully Connected Autoencoder
+# =======================================================#
+image_array = []
 
-# for epoch in range(num_epochs):
-#     tqdm.write(f'Epoch:{epoch +1}')
-#     for batch_idx, (images, _) in enumerate(tqdm(train_loader)):
+for epoch in range(num_epochs):
+    tqdm.write(f'Epoch:{epoch +1}')
+    for batch_idx, (images, _) in enumerate(tqdm(train_loader)):
         
-#         # Get data to Cuda/gpu if possible. Data is the tuple of the images and labels
-#         # We have to reshape images because they are (10,1,28,28) when input into the network.
-#         # But for a fully connected, we need to have a shape (10,784)
-#         # 10 is the number of batches
-#         images = images.reshape(-1,28*28)
+        # Get data to Cuda/gpu if possible. Data is the tuple of the images and labels
+        # We have to reshape images because they are (10,1,28,28) when input into the network.
+        # But for a fully connected, we need to have a shape (10,784)
+        # 10 is the number of batches
+        images = images.reshape(-1,28*28)
 
-#         images = images.to(device=device) # Images
-#        # labels = labels.to(device=device) # label that classifies image
+        images = images.to(device=device) # Images
+       # labels = labels.to(device=device) # label that classifies image
 
-#         # Forward
-#         outputs = model(images)
-#         loss = criterion(outputs, images) # Predicted outputs vs actual labels
+        # Forward
+        outputs = model(images)
+        loss = criterion(outputs, images) # Predicted outputs vs actual labels
 
-#         # Go Backward in the network:
-#         optimizer.zero_grad() # Empty the values in the gradient attribute
-#         loss.backward() # Backpropagation
+        # Go Backward in the network:
+        optimizer.zero_grad() # Empty the values in the gradient attribute
+        loss.backward() # Backpropagation
 
-#         # gradient descent or adam step
-#         optimizer.step() # Update parameters
-#         image_array.append((epoch,images,outputs))
+        # gradient descent or adam step
+        optimizer.step() # Update parameters
+        image_array.append((epoch,images,outputs))
 
 
 # =======================================================#
