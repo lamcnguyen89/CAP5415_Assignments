@@ -34,6 +34,29 @@ Note: You can use L2-Norm for distance between 2 samples.
 
 Sources:
 
-
+Train Test Split: https://www.geeksforgeeks.org/how-to-split-the-dataset-with-scikit-learns-train_test_split-function/
 
 """
+
+
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+
+
+digits = load_digits()
+
+print(digits.data.shape)
+
+
+image_data = digits.data
+image_targets = digits.target
+
+features_train,features_test, labels_train,labels_test = train_test_split(
+image_data, image_targets, test_size=500, random_state=42
+)
+
+print(features_train)
+
+
+
+

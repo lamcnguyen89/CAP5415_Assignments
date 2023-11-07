@@ -50,7 +50,7 @@ How to get info on model parameters using Torchinfo: https://pypi.org/project/to
 
 How to save trained model: https://wandb.ai/wandb/common-ml-errors/reports/How-to-Save-and-Load-Models-in-PyTorch--VmlldzozMjg0MTE
 
-
+How to take subsets of dataset: https://discuss.pytorch.org/t/how-to-get-a-part-of-datasets/82161
 
 
 
@@ -59,57 +59,223 @@ How to save trained model: https://wandb.ai/wandb/common-ml-errors/reports/How-t
 # 1. Load Modules
 # ========================================================================================#
 
-
-from Convolutional_Autoencoder import CNN_Autoencoder
-from Fully_Connected_Autoencoder import FCC_Autoencoder
-from torchinfo import summary
-import subprocess
 import torch
-import gc
-from pynvml import nvmlInit, nvmlDeviceGetHandleByIndex, nvmlDeviceGetMemoryInfo
-import time
+from pathlib import Path
+from PIL import Image
+import os
+import numpy as np
+from torchvision.utils import save_image
+import torch.optim as optim # Optimization algorithms
+import torch.nn as nn # All the Neural network models, loss functions
+import torch.nn.functional as F # All functions without parameters
+from torch.utils.data import DataLoader # Easier dataset management such as minibatches
+import torchvision.datasets as datasets # Standard datasets that can be used as test training data
+import torchvision.transforms as transforms # Transformations that can be performed on the dataset
+from torchinfo import summary # provides a summary of the model architecture and it's parameters
+import logging
+import matplotlib.pyplot as plt
+
+# Import some packages for logging training and showing progress
+from tqdm_loggable.auto import tqdm
+
+
+
+# Set up some basic logging to record traces of training
+logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+        filename="Assignment_03/01_Autoencoder/Autoencoder_Documents/Autoencoder_Parameter_Summary.txt" # Save log to a file
+    )
+
+
+# Hyperparameters
+input_size = 28*28
+hidden_size = 100
+num_classes= 10
+learning_rate = 0.1
+batch_size = 64
+num_epochs = 10
+weight_decay = 1e-5
+    
 
 
 # Load GPU Parameters
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-min_memory_available = 8*1024*1024*1024 # 8gb memory
+
+
+# =======================================================#
+# 2. Import Data:
+# =======================================================#
+
+train_dataset = datasets.MNIST(root='Assignment_03/01_Autoencoder/MNIST_dataset/', 
+               train=True, 
+               transform=transforms.ToTensor(),
+               download=True
+               )#Transforms transforms numpy array to tensors so that pytorch can use the data
+
+
+train_loader = DataLoader(
+    dataset = train_dataset,
+    batch_size = batch_size,
+    shuffle = True
+)
+
+
 
 # ========================================================================================#
-# 2. Create and Train the Convolutional Autoencoder and Fully Connected Autoencoder Models
+# 3. Import the Fully Connected Autoencoder Model and train
 # ========================================================================================#
+from Fully_Connected_Autoencoder import FCC_Autoencoder
 
 
-# Clear GPU memory after Training Each Model
-def clear_gpu_memory():
-    torch.cuda.empty_cache()
-    gc.collect()
-    # del variables
-
-# Wait until There is enough Memory to train
-def wait_until_enough_gpu_memory(min_memory_available, max_retries=10, sleep_time=5):
-    nvmlInit()
-    handle = nvmlDeviceGetHandleByIndex(torch.cuda.current_device())
-
-    for _ in range(max_retries):
-        info = nvmlDeviceGetMemoryInfo(handle)
-        if info.free >= min_memory_available:
-            break
-        print(f"Waiting for {min_memory_available} bytes of free GPU memory. Retrying in {sleep_time} seconds...")
-        time.sleep(sleep_time)
-    else:
-        raise RuntimeError(f"Failed to acquire {min_memory_available} bytes of free GPU memory after {max_retries} retries.")
-    
+model = FCC_Autoencoder(input_size=input_size).to(device)
+criterion = nn.MSELoss()
+optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
 
 
-# Run the different Models
-subprocess.run(f"python Assignment_03/01_Autoencoder/Fully_Connected_Autoencoder.py", shell=True)
-clear_gpu_memory()
-wait_until_enough_gpu_memory(min_memory_available)
+image_array = []
 
-subprocess.run(f"python Assignment_03/01_Autoencoder/Convolutional_Autoencoder.py", shell=True)
-clear_gpu_memory()
-wait_until_enough_gpu_memory(min_memory_available)
+print("Beginning the training of the Fully Connected Autoencoder")
+for epoch in range(num_epochs):
+    tqdm.write(f'Epoch:{epoch +1}')
+    for batch_idx, (images, _) in enumerate(tqdm(train_loader)):
+        
+        # Get data to Cuda/gpu if possible. Data is the tuple of the images and labels
+        # We have to reshape images because they are (10,1,28,28) when input into the network.
+        # But for a fully connected, we need to have a shape (10,784)
+        # 10 is the number of batches
+        images = images.reshape(-1,28*28)
 
+        images = images.to(device=device) # Images
+       # labels = labels.to(device=device) # label that classifies image
+
+        # Forward
+        outputs = model(images)
+        loss = criterion(outputs, images) # Predicted outputs vs actual labels
+
+        # Go Backward in the network:
+        optimizer.zero_grad() # Empty the values in the gradient attribute
+        loss.backward() # Backpropagation
+
+        # gradient descent or adam step
+        optimizer.step() # Update parameters
+        image_array.append((epoch,images,outputs))
+
+
+# =======================================================#
+# 5. Get the number of parameters for the FC-Autoencoder:
+# =======================================================#
+
+# Prints out the architecture of the trained model
+FCC_Autoencoder_summary = summary(model)
+
+logging.info(FCC_Autoencoder_summary) # Saves the parameter data file into the folder Autoencoder_Documents
+
+
+for k in range(0, num_epochs, 4):
+    plt.figure(figsize=(9, 2))
+    plt.gray()
+    imgs = image_array[k][1].cpu().detach().numpy()
+    recon = image_array[k][2].cpu().detach().numpy()
+    for i, item in enumerate(imgs):
+        if i >= 9: break
+        plt.subplot(2, 9, i+1)
+        item = item.reshape(-1, 28,28) # -> use for Autoencoder_Linear
+        # item: 1, 28, 28
+        plt.imshow(item[0])
+            
+    for i, item in enumerate(recon):
+        if i >= 9: break
+        plt.subplot(2, 9, 9+i+1) # row_length + i + 1
+        item = item.reshape(-1, 28,28) # -> use for Autoencoder_Linear
+        # item: 1, 28, 28
+        plt.imshow(item[0])
+
+
+# =======================================================#
+# 6. Save the trained Fully Connected Autoencoder
+# =======================================================#
+
+print("Saving the Fully Connected Autoencoder Model to the folder: Assignment_03/01_Autoencoder/Trained_Autoencoders")
+torch.save(model.state_dict(),'Assignment_03/01_Autoencoder/Trained_Autoencoders/FCC_Autoencoder_Model.pth')
+
+
+
+# ========================================================================================#
+# 2. Import the Convolutional Autoencoder Model and train
+# ========================================================================================#
+from Convolutional_Autoencoder import CNN_Autoencoder
+
+model = CNN_Autoencoder().to(device)
+criterion = nn.MSELoss()
+optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=weight_decay)
+
+
+
+image_array = []
+
+print("Beginning the training of the Convolutional Autoencoder")
+for epoch in range(num_epochs):
+    tqdm.write(f'Epoch:{epoch +1}')
+    for batch_idx, (images, _) in enumerate(tqdm(train_loader)):
+        
+        # Get data to Cuda/gpu if possible. Data is the tuple of the images and labels
+        # We have to reshape images because they are (10,1,28,28) when input into the network.
+        # But for a fully connected, we need to have a shape (10,784)
+        # 10 is the number of batches
+        # images = images.reshape(-1,28*28)
+
+        images = images.to(device=device) # Images
+       # labels = labels.to(device=device) # label that classifies image
+
+        # Forward
+        outputs = model(images)
+        loss = criterion(outputs, images) # Predicted outputs vs actual labels
+
+        # Go Backward in the network:
+        optimizer.zero_grad() # Empty the values in the gradient attribute
+        loss.backward() # Backpropagation
+
+        # gradient descent or adam step
+        optimizer.step() # Update parameters
+        image_array.append((epoch,images,outputs))
+
+
+# =======================================================#
+# 5. Get the number of parameters for the CNN-Autoencoder:
+# =======================================================#
+
+# Prints out the architecture of the trained model
+CNN_Autoencoder_summary = summary(model)
+
+logging.info(CNN_Autoencoder_summary) # Saves the parameter data file into the folder Autoencoder_Documents
+
+for k in range(0, num_epochs, 4):
+    plt.figure(figsize=(9, 2))
+    plt.gray()
+    imgs = image_array[k][1].cpu().detach().numpy()
+    recon = image_array[k][2].cpu().detach().numpy()
+    for i, item in enumerate(imgs):
+        if i >= 9: break
+        plt.subplot(2, 9, i+1)
+        # item = item.reshape(-1, 28,28) # -> use for Autoencoder_Linear
+        # item: 1, 28, 28
+        plt.imshow(item[0])
+            
+    for i, item in enumerate(recon):
+        if i >= 9: break
+        plt.subplot(2, 9, 9+i+1) # row_length + i + 1
+        # item = item.reshape(-1, 28,28) # -> use for Autoencoder_Linear
+        # item: 1, 28, 28
+        plt.imshow(item[0])
+
+# =======================================================#
+# 6. Save the trained Convolutional Autoencoder
+# =======================================================#
+
+print("Saving the Convolutional Autoencoder Model to the folder: Assignment_03/01_Autoencoder/Trained_Autoencoders")
+torch.save(model.state_dict(),'Assignment_03/01_Autoencoder/Trained_Autoencoders/CNN_Autoencoder_Model.pth')
 
 
 
@@ -118,28 +284,41 @@ wait_until_enough_gpu_memory(min_memory_available)
 # ========================================================================================#
 
 
-# Load an instance of the trained model and load the saved parameters that were previously trained
+# # Load an instance of the trained model and load the saved parameters that were previously trained
 
-#Image Dimensions from the MNIST Dataset
-channels = 1
-height =28
-width = 28
+# #Image Dimensions from the MNIST Dataset
+# channels = 1
+# height =28
+# width = 28
 
-# Create an instance of the models
-fcc_model = FCC_Autoencoder(input_size= (height*width*channels)).to(device)
-cnn_model = CNN_Autoencoder().to(device)
-
-
-# Load the saved parameters
-fcc_model.load_state_dict(torch.load('Assignment_03/01_Autoencoder/Trained_Autoencoders/FCC_Autoencoder_Model.pth'))
-cnn_model.load_state_dict(torch.load('Assignment_03/01_Autoencoder/Trained_Autoencoders/CNN_Autoencoder_Model.pth'))
+# # Create an instance of the models
+# fcc_model = FCC_Autoencoder(input_size= (height*width*channels)).to(device)
+# cnn_model = CNN_Autoencoder().to(device)
 
 
-# Get the images (two from each classifier) and load them into a Tensor
+# # Load the saved parameters
+# fcc_model.load_state_dict(torch.load('Assignment_03/01_Autoencoder/Trained_Autoencoders/FCC_Autoencoder_Model.pth'))
+# cnn_model.load_state_dict(torch.load('Assignment_03/01_Autoencoder/Trained_Autoencoders/CNN_Autoencoder_Model.pth'))
 
-# Push the tensor through the trained model and save them to a numpy array
+# fcc_model.eval()
+# cnn_model.eval()
 
-# Save the images in the numpy array to a folder.
+# # Get the images (two from each classifier) and load them into a Tensor
+
+# input_images_array = Path('Assignment_03/01_Autoencoder/Test_Images').glob('*png')
+# for image in input_images_array:
+#         # Load image, load the filename and convert the image to an array.
+#         filename = os.path.basename(image).split('.',1)[0]
+#         im = Image.open(image).convert("L")
+#         im = np.asarray(im)
+#         im = torch.from_numpy(im)
+#         im = fcc_model.forward(im)
+#         save_image(im, f'Assignment_03/01_Autoencoder/Processed_Images/{filename}_processed.png')
+
+#         # Push the tensor through the trained model and save them to a numpy array
+
+
+#         # Save the images in the numpy array to a folder.
 
 
 
