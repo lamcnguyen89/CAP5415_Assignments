@@ -297,3 +297,92 @@
 2023-11-14 12:34:58 INFO Got 28383 / 50000 with accuracy 56.77
 2023-11-14 12:35:18 INFO Checking accuracy on training data
 2023-11-14 12:35:30 INFO Got 29173 / 50000 with accuracy 58.35
+2023-11-14 14:23:37 INFO Begin Training CIFAR-10 dataset with this model: NN_1(
+  (conv1): Conv2d(3, 40, kernel_size=(5, 5), stride=(1, 1))
+  (conv2): Conv2d(40, 40, kernel_size=(5, 5), stride=(1, 1))
+  (pool): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+  (fc1): Linear(in_features=1000, out_features=100, bias=True)
+  (fc2): Linear(in_features=100, out_features=10, bias=True)
+)
+2023-11-14 14:23:43 INFO Checking accuracy on training data
+2023-11-14 14:23:46 INFO Got 5000 / 50000 with accuracy 10.00
+2023-11-14 14:23:52 INFO Checking accuracy on training data
+2023-11-14 14:23:55 INFO Got 5000 / 50000 with accuracy 10.00
+2023-11-14 14:24:30 INFO Begin Training CIFAR-10 dataset with this model: NN_1(
+  (conv1): Conv2d(3, 40, kernel_size=(5, 5), stride=(1, 1))
+  (conv2): Conv2d(40, 40, kernel_size=(5, 5), stride=(1, 1))
+  (pool): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+  (fc1): Linear(in_features=1000, out_features=100, bias=True)
+  (fc2): Linear(in_features=100, out_features=10, bias=True)
+)
+2023-11-14 14:24:36 INFO Checking accuracy on training data
+2023-11-14 14:24:52 INFO Begin Training CIFAR-10 dataset with this model: NN_1(
+  (conv1): Conv2d(3, 40, kernel_size=(5, 5), stride=(1, 1))
+  (conv2): Conv2d(40, 40, kernel_size=(5, 5), stride=(1, 1))
+  (pool): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+  (fc1): Linear(in_features=1000, out_features=100, bias=True)
+  (fc2): Linear(in_features=100, out_features=10, bias=True)
+)
+2023-11-14 14:24:58 INFO Checking accuracy on training data
+2023-11-14 14:25:01 INFO Got 5000 / 50000 with accuracy 10.00
+2023-11-14 14:25:08 INFO Checking accuracy on training data
+2023-11-14 14:25:10 INFO Got 5000 / 50000 with accuracy 10.00
+2023-11-14 14:25:17 INFO Checking accuracy on training data
+2023-11-14 14:25:20 INFO Got 5000 / 50000 with accuracy 10.00
+2023-11-14 14:25:26 INFO Checking accuracy on training data
+2023-11-14 14:25:29 INFO Got 5008 / 50000 with accuracy 10.02
+2023-11-14 14:25:35 INFO Checking accuracy on training data
+2023-11-14 14:25:38 INFO Got 5000 / 50000 with accuracy 10.00
+2023-11-14 14:25:38 INFO Training Epoch: 5, loss = 2.2941
+2023-11-14 14:25:44 INFO Checking accuracy on training data
+2023-11-14 14:25:47 INFO Got 5057 / 50000 with accuracy 10.11
+2023-11-14 14:25:53 INFO Checking accuracy on training data
+2023-11-14 14:25:56 INFO Got 5000 / 50000 with accuracy 10.00
+2023-11-14 14:26:02 INFO Checking accuracy on training data
+2023-11-14 14:26:05 INFO Got 6985 / 50000 with accuracy 13.97
+2023-11-14 14:26:11 INFO Checking accuracy on training data
+2023-11-14 14:26:14 INFO Got 9368 / 50000 with accuracy 18.74
+2023-11-14 14:26:20 INFO Checking accuracy on training data
+2023-11-14 14:26:23 INFO Got 10772 / 50000 with accuracy 21.54
+2023-11-14 14:26:23 INFO Training Epoch: 10, loss = 2.1592
+2023-11-14 14:26:29 INFO Checking accuracy on training data
+2023-11-14 14:26:32 INFO Got 11202 / 50000 with accuracy 22.40
+2023-11-14 14:26:38 INFO Checking accuracy on training data
+2023-11-14 14:26:41 INFO Got 11985 / 50000 with accuracy 23.97
+2023-11-14 14:26:47 INFO Checking accuracy on training data
+2023-11-14 14:26:50 INFO Got 12647 / 50000 with accuracy 25.29
+2023-11-14 14:26:56 INFO Checking accuracy on training data
+2023-11-14 14:26:59 INFO Got 13127 / 50000 with accuracy 26.25
+2023-11-14 14:27:05 INFO Checking accuracy on training data
+2023-11-14 14:27:08 INFO Got 13783 / 50000 with accuracy 27.57
+2023-11-14 14:27:08 INFO Training Epoch: 15, loss = 1.7561
+2023-11-14 14:27:14 INFO Checking accuracy on training data
+2023-11-14 14:27:17 INFO Got 14521 / 50000 with accuracy 29.04
+2023-11-14 14:27:23 INFO Checking accuracy on training data
+2023-11-14 14:27:26 INFO Got 15384 / 50000 with accuracy 30.77
+2023-11-14 14:27:32 INFO Checking accuracy on training data
+2023-11-14 14:27:35 INFO Got 16078 / 50000 with accuracy 32.16
+2023-11-14 14:27:41 INFO Checking accuracy on training data
+2023-11-14 14:27:44 INFO Got 17098 / 50000 with accuracy 34.20
+2023-11-14 14:27:50 INFO Checking accuracy on training data
+2023-11-14 14:27:53 INFO Got 17938 / 50000 with accuracy 35.88
+2023-11-14 14:27:53 INFO Training Epoch: 20, loss = 1.6620
+2023-11-14 14:27:59 INFO Checking accuracy on training data
+2023-11-14 14:28:02 INFO Got 18511 / 50000 with accuracy 37.02
+2023-11-14 14:28:08 INFO Checking accuracy on training data
+2023-11-14 14:28:11 INFO Got 19135 / 50000 with accuracy 38.27
+2023-11-14 14:28:17 INFO Checking accuracy on training data
+2023-11-14 14:28:20 INFO Got 19597 / 50000 with accuracy 39.19
+2023-11-14 14:28:26 INFO Checking accuracy on training data
+2023-11-14 14:28:29 INFO Got 20310 / 50000 with accuracy 40.62
+2023-11-14 14:28:36 INFO Checking accuracy on training data
+2023-11-14 14:28:38 INFO Got 20951 / 50000 with accuracy 41.90
+2023-11-14 14:28:38 INFO Training Epoch: 25, loss = 2.0868
+2023-11-14 14:28:45 INFO Checking accuracy on training data
+2023-11-14 14:28:48 INFO Got 21658 / 50000 with accuracy 43.32
+2023-11-14 14:28:54 INFO Checking accuracy on training data
+2023-11-14 14:28:57 INFO Got 22157 / 50000 with accuracy 44.31
+2023-11-14 14:29:03 INFO Checking accuracy on training data
+2023-11-14 14:29:06 INFO Got 22509 / 50000 with accuracy 45.02
+2023-11-14 14:29:12 INFO Checking accuracy on training data
+2023-11-14 14:29:15 INFO Got 23144 / 50000 with accuracy 46.29
