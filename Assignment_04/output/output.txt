@@ -169,3 +169,111 @@
 2023-11-13 18:11:12 INFO Got 27558 / 50000 with accuracy 55.12
 2023-11-13 18:11:12 INFO Checking accuracy on test data
 2023-11-13 18:11:13 INFO Got 4954 / 10000 with accuracy 49.54
+2023-11-13 18:55:28 INFO Begin Training CIFAR-10 dataset with this model: NN_2(
+  (conv1): Conv2d(3, 40, kernel_size=(5, 5), stride=(1, 1))
+  (conv2): Conv2d(40, 40, kernel_size=(5, 5), stride=(1, 1))
+  (pool): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+  (fc1): Linear(in_features=1000, out_features=100, bias=True)
+  (fc2): Linear(in_features=100, out_features=10, bias=True)
+)
+2023-11-13 18:56:59 INFO Training Epoch: 5, loss = 2.3076
+2023-11-13 18:58:40 INFO Training Epoch: 10, loss = 1.5482
+2023-11-13 19:00:22 INFO Training Epoch: 15, loss = 1.4678
+2023-11-13 19:02:02 INFO Training Epoch: 20, loss = 1.2371
+2023-11-13 19:03:44 INFO Training Epoch: 25, loss = 1.8116
+2023-11-13 19:05:26 INFO Checking accuracy on training data
+2023-11-13 19:05:38 INFO Got 28834 / 50000 with accuracy 57.67
+2023-11-13 19:05:38 INFO Checking accuracy on test data
+2023-11-13 19:05:40 INFO Got 5253 / 10000 with accuracy 52.53
+2023-11-13 19:08:29 INFO Begin Training CIFAR-10 dataset with this model: NN_2(
+  (conv1): Conv2d(3, 40, kernel_size=(5, 5), stride=(1, 1))
+  (conv2): Conv2d(40, 40, kernel_size=(5, 5), stride=(1, 1))
+  (pool): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+  (fc1): Linear(in_features=1000, out_features=100, bias=True)
+  (fc2): Linear(in_features=100, out_features=10, bias=True)
+)
+2023-11-13 19:08:45 INFO Checking accuracy on training data
+2023-11-13 19:08:53 INFO Got 5000 / 50000 with accuracy 10.00
+2023-11-13 19:10:14 INFO Begin Training CIFAR-10 dataset with this model: NN_2(
+  (conv1): Conv2d(3, 40, kernel_size=(5, 5), stride=(1, 1))
+  (conv2): Conv2d(40, 40, kernel_size=(5, 5), stride=(1, 1))
+  (pool): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+  (fc1): Linear(in_features=1000, out_features=100, bias=True)
+  (fc2): Linear(in_features=100, out_features=10, bias=True)
+)
+2023-11-13 19:10:31 INFO Checking accuracy on training data
+2023-11-13 19:10:41 INFO Got 5000 / 50000 with accuracy 10.00
+2023-11-13 19:10:58 INFO Checking accuracy on training data
+2023-11-13 19:11:10 INFO Got 5000 / 50000 with accuracy 10.00
+2023-11-13 19:11:30 INFO Checking accuracy on training data
+2023-11-13 19:11:42 INFO Got 5000 / 50000 with accuracy 10.00
+2023-11-13 19:12:02 INFO Checking accuracy on training data
+2023-11-13 19:12:13 INFO Got 5000 / 50000 with accuracy 10.00
+2023-11-13 19:12:34 INFO Checking accuracy on training data
+2023-11-13 19:12:45 INFO Got 5000 / 50000 with accuracy 10.00
+2023-11-13 19:12:45 INFO Training Epoch: 5, loss = 2.3157
+2023-11-13 19:13:05 INFO Checking accuracy on training data
+2023-11-13 19:13:17 INFO Got 7279 / 50000 with accuracy 14.56
+2023-11-13 19:13:37 INFO Checking accuracy on training data
+2023-11-13 19:13:48 INFO Got 10228 / 50000 with accuracy 20.46
+2023-11-13 19:14:08 INFO Checking accuracy on training data
+2023-11-13 19:14:20 INFO Got 13432 / 50000 with accuracy 26.86
+2023-11-13 19:14:40 INFO Checking accuracy on training data
+2023-11-13 19:14:51 INFO Got 14184 / 50000 with accuracy 28.37
+2023-11-13 19:15:11 INFO Checking accuracy on training data
+2023-11-13 19:15:23 INFO Got 14678 / 50000 with accuracy 29.36
+2023-11-13 19:15:23 INFO Training Epoch: 10, loss = 1.9762
+2023-11-13 19:15:43 INFO Checking accuracy on training data
+2023-11-13 19:15:54 INFO Got 16064 / 50000 with accuracy 32.13
+2023-11-13 19:16:14 INFO Checking accuracy on training data
+2023-11-13 19:16:26 INFO Got 17647 / 50000 with accuracy 35.29
+2023-11-13 19:16:46 INFO Checking accuracy on training data
+2023-11-13 19:16:57 INFO Got 17852 / 50000 with accuracy 35.70
+2023-11-13 19:17:17 INFO Checking accuracy on training data
+2023-11-13 19:17:29 INFO Got 18199 / 50000 with accuracy 36.40
+2023-11-13 19:17:49 INFO Checking accuracy on training data
+2023-11-13 19:18:01 INFO Got 20862 / 50000 with accuracy 41.72
+2023-11-13 19:18:01 INFO Training Epoch: 15, loss = 1.6520
+2023-11-13 19:18:22 INFO Checking accuracy on training data
+2023-11-13 19:18:33 INFO Got 21601 / 50000 with accuracy 43.20
+2023-11-13 19:18:54 INFO Checking accuracy on training data
+2023-11-13 19:19:06 INFO Got 23333 / 50000 with accuracy 46.67
+2023-11-13 19:19:26 INFO Checking accuracy on training data
+2023-11-13 19:19:38 INFO Got 24261 / 50000 with accuracy 48.52
+2023-11-13 19:19:59 INFO Checking accuracy on training data
+2023-11-13 19:20:10 INFO Got 25089 / 50000 with accuracy 50.18
+2023-11-13 19:20:31 INFO Checking accuracy on training data
+2023-11-13 19:20:43 INFO Got 24479 / 50000 with accuracy 48.96
+2023-11-13 19:20:43 INFO Training Epoch: 20, loss = 1.5984
+2023-11-13 19:21:04 INFO Checking accuracy on training data
+2023-11-13 19:21:16 INFO Got 25216 / 50000 with accuracy 50.43
+2023-11-13 19:21:39 INFO Checking accuracy on training data
+2023-11-13 19:21:51 INFO Got 24930 / 50000 with accuracy 49.86
+2023-11-13 19:22:13 INFO Checking accuracy on training data
+2023-11-13 19:22:25 INFO Got 27457 / 50000 with accuracy 54.91
+2023-11-13 19:22:47 INFO Checking accuracy on training data
+2023-11-13 19:22:58 INFO Got 27325 / 50000 with accuracy 54.65
+2023-11-13 19:23:19 INFO Checking accuracy on training data
+2023-11-13 19:23:31 INFO Got 28422 / 50000 with accuracy 56.84
+2023-11-13 19:23:31 INFO Training Epoch: 25, loss = 1.0867
+2023-11-13 19:23:53 INFO Checking accuracy on training data
+2023-11-13 19:24:06 INFO Got 29094 / 50000 with accuracy 58.19
+2023-11-13 19:24:25 INFO Checking accuracy on training data
+2023-11-13 19:24:37 INFO Got 28474 / 50000 with accuracy 56.95
+2023-11-13 19:24:55 INFO Checking accuracy on training data
+2023-11-13 19:25:03 INFO Got 29662 / 50000 with accuracy 59.32
+2023-11-13 19:25:23 INFO Checking accuracy on training data
+2023-11-13 19:25:35 INFO Got 30361 / 50000 with accuracy 60.72
+2023-11-13 19:25:55 INFO Checking accuracy on training data
+2023-11-13 19:26:06 INFO Got 30799 / 50000 with accuracy 61.60
+2023-11-13 19:26:06 INFO Checking accuracy on test data
+2023-11-13 19:26:09 INFO Got 5689 / 10000 with accuracy 56.89
+2023-11-13 19:30:42 INFO Begin Training CIFAR-10 dataset with this model: NN_2(
+  (conv1): Conv2d(3, 40, kernel_size=(5, 5), stride=(1, 1))
+  (conv2): Conv2d(40, 40, kernel_size=(5, 5), stride=(1, 1))
+  (pool): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), padding=0, dilation=1, ceil_mode=False)
+  (fc1): Linear(in_features=1000, out_features=100, bias=True)
+  (fc2): Linear(in_features=100, out_features=10, bias=True)
+)
+2023-11-13 19:30:59 INFO Checking accuracy on training data
+2023-11-13 19:31:09 INFO Got 5000 / 50000 with accuracy 10.00
