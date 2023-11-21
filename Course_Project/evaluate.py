@@ -1,3 +1,8 @@
+"""
+3. Evaluates the trained model on the test set
+
+"""
+
 import options
 import utils
 from trainer import Validator

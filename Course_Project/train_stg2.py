@@ -1,3 +1,8 @@
+"""
+2. This file is about finetuning the network with 2D Joint Optimization
+
+"""
+
 import options
 import utils
 from trainer import TrainerStage2

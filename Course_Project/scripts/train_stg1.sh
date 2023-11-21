@@ -1,3 +1,14 @@
+
+#Sets the parameters that will be input into the network training. This script file can be run on the command line
+
+python train_stg1.py --model ORIG_STG1 --experiment adam_trueWD_restart \
+	--endEpoch 1000 \
+	--chunkSize 100 --batchSize 100 \
+	--optim adam --trueWD 1e-4 --lr 1e-2 \
+	--lrSched restart --T_0 5 --T_mult 2 --lrBase 1e-4 \
+	--gpu 1
+
+
 # python train_stg1.py --model ORIG_STG1 --experiment adam_trueWD \
 # 	--endEpoch 1000 \
 # 	--chunkSize 100 --batchSize 100 \
@@ -48,12 +59,7 @@
 # 	--lrSched restart --T_0 5 --T_mult 2 --lrBase 1e-3 \
 # 	--gpu 1
 
-python train_stg1.py --model ORIG_STG1 --experiment adam_trueWD_restart \
-	--endEpoch 1000 \
-	--chunkSize 100 --batchSize 100 \
-	--optim adam --trueWD 1e-4 --lr 1e-2 \
-	--lrSched restart --T_0 5 --T_mult 2 --lrBase 1e-4 \
-	--gpu 1
+
 
 # python train_stg1.py --model ORIG_STG1 --experiment sgd_trueWD_restart \
 # 	--endEpoch 1000 \

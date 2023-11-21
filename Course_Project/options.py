@@ -6,6 +6,7 @@ import torch
 import torch.nn.functional as F
 
 
+# The parse arguments function translates commands from the bash/unix commandline into a format that is readable for the python code
 def parse_arguments():
     """Parse input arguments"""
 
@@ -142,6 +143,7 @@ def parse_arguments():
 
     return parser.parse_args()
 
+# Get the arguments input from the commandline and script
 def get_arguments():
     cfg = parse_arguments()
     # these stay fixed

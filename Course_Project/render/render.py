@@ -1,5 +1,5 @@
 import os,sys,time
-import bpy
+import bpy # Blender Python Module
 import numpy as np
 import shutil
 import scipy.io
@@ -85,7 +85,8 @@ for line in listFile:
 	for m in bpy.data.meshes:
 		bpy.data.meshes.remove(m)
 	for m in bpy.data.materials:
-	    m.user_clear()
-	    bpy.data.materials.remove(m)
+		m.user_clear()
+		bpy.data.materials.remove(m)
 
+	
 	print("{1} done, time={0:.4f} sec".format(time.time()-timeStart,MODEL))
