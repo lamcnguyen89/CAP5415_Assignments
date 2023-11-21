@@ -157,6 +157,7 @@ cython_debug/
 
 *.tar.gz
 *dataset/
+*data/
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
