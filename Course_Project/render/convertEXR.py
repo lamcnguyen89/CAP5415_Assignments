@@ -1,3 +1,8 @@
+"""
+Converts EXR file format to MAT
+
+"""
+
 import os,sys,time
 import numpy as np
 import scipy.io
@@ -9,6 +14,8 @@ MODEL_LIST = sys.argv[-3]
 RESOLUTION = int(sys.argv[-2])
 FIXED = int(sys.argv[-1])
 N = 100
+
+
 
 def readEXR(fname,RESOLUTION):
 	channel_list = ["B","G","R"]
