@@ -1,4 +1,5 @@
 """Utilities for 2D-3D conversion, training and building models"""
+
 import logging
 import os
 
@@ -16,10 +17,13 @@ import torchvision
 from PCGModel import Structure_Generator
 
 
+# Create folder to store data, or whatever is needed
 def make_folder(PATH):
     if not os.path.exists(PATH):
         os.makedirs(PATH)
 
+
+# Set up logging to record training progress, mmetrics and other things
 def make_logger(PATH):
     logger = logging.getLogger("logger")
     logger.setLevel(logging.DEBUG)
@@ -29,6 +33,8 @@ def make_logger(PATH):
     print("Create logger")
     return logger
 
+
+# A function in the TensorboardX module. TensorboardX provides visualization of Neural Netowkr training progress
 def make_summary_writer(EXPERIMENT):
     writer = SummaryWriter(comment="_"+EXPERIMENT)
 
@@ -36,6 +42,7 @@ def make_summary_writer(EXPERIMENT):
     return writer
 
 
+# Load data into batches
 def make_data_fixed(cfg):
     ds_tr = data.PointCloud2dDataset(
         cfg, loadNovel=False, loadFixedOut=True, loadTest=False)
@@ -53,6 +60,8 @@ def make_data_fixed(cfg):
     print(f"batch size:{cfg.batchSize}, chunk size: {cfg.chunkSize}")
     return dl_tr, dl_test
 
+
+# Unpack each batch
 def unpack_batch_fixed(batch, device):
     input_images = batch['inputImage'].float().to(device)
     depthGT = batch['depthGT'].float().to(device)
@@ -60,6 +69,8 @@ def unpack_batch_fixed(batch, device):
 
     return input_images, depthGT, maskGT
 
+
+# Randomize Data Batch
 def make_data_novel(cfg):
     ds_tr = data.PointCloud2dDataset(
         cfg, loadNovel=True, loadFixedOut=False, loadTest=False)
@@ -77,6 +88,8 @@ def make_data_novel(cfg):
     print(f"batch size:{cfg.batchSize}, chunk size: {cfg.chunkSize}")
     return dl_tr, dl_test
 
+
+# Unpack the randomized batch
 def unpack_batch_novel(batch, device):
     input_images = batch['inputImage'].float().to(device)
     renderTrans = batch['targetTrans'].float().to(device)
@@ -86,16 +99,19 @@ def unpack_batch_novel(batch, device):
     return input_images, renderTrans, depthGT, maskGT
 
 
+# Create Loss function for training
 def define_losses():
     l1_loss = nn.L1Loss()
     bce_loss = nn.BCEWithLogitsLoss()
     return l1_loss, bce_loss
 
+
+# Function to build the Autoencoder
 def build_structure_generator(cfg):
     model = Structure_Generator(
         outViewN=cfg.outViewN, outW=cfg.outW,
         outH=cfg.outH, renderDepth=cfg.renderDepth)
-    statement = "Build Structure Generator"
+    statement = "Constructing the Autoencoder"
 
     if cfg.loadPath is not None:
         LOAD_PATH = f"models/{cfg.loadPath}"
@@ -111,6 +127,8 @@ def build_structure_generator(cfg):
     print(statement)
     return model
 
+
+# Create the gradient optimizer to backpropagate and change the weights in the network
 def make_optimizer(cfg, model):
     params = model.parameters()
 
@@ -136,6 +154,8 @@ def make_optimizer(cfg, model):
     print(statement)
     return opt
 
+
+# Configure the learning rate
 def make_lr_scheduler(cfg, optimizer):
     if not cfg.lrSched:
         return None
@@ -160,15 +180,19 @@ def make_lr_scheduler(cfg, optimizer):
     return sched
 
 
+# Saves the model with the lowest learning rate.
 def save_best_model(model_path, model, df_hist):
     if df_hist['val_loss'].tail(1).iloc[0] <= df_hist['val_loss'].min():
         torch.save(model.state_dict(), f"{model_path}/best.pth")
 
+
+# Saves a checkpoint of the model with its current parameter weights at a defined epoch
 def checkpoint_model(model_path, model, epoch, saveEpoch):
     if (saveEpoch is not None) and (epoch % saveEpoch == 0):
         torch.save(model.state_dict(), f"{model_path}/{epoch}.pth")
 
 
+# Log the training progress
 def log_hist(logger, df_hist):
     last = df_hist.tail(1)
     best = df_hist.sort_values('val_loss').head(1)
@@ -177,6 +201,8 @@ def log_hist(logger, df_hist):
     logger.debug(summary[['name', 'epoch', 'train_loss', 'val_loss']])
     logger.debug('')
 
+
+# Show losses on TensorboardX Visualization for the Training Stage 1 where the Autoencoder is pretrained
 def write_on_board_losses_stg1(writer, df_hist):
     row = df_hist.tail(1).iloc[0]
 
@@ -193,6 +219,8 @@ def write_on_board_losses_stg1(writer, df_hist):
         'val': row.val_loss_mask,
     }, row.epoch)
 
+
+# Show losses on TensorboardX Visualization for the Training Stage 2 where the network is refined and then the projections are fused together.
 def write_on_board_losses_stg2(writer, df_hist):
     row = df_hist.tail(1).iloc[0]
 
@@ -209,6 +237,7 @@ def write_on_board_losses_stg2(writer, df_hist):
         'val': row.val_loss_mask,
     }, row.epoch)
 
+# Show images on TensorBoardX for Stage 1
 def write_on_board_images_stg1(writer, images, epoch):
     writer.add_image('RGB', images['RGB'], epoch)
     writer.add_image('depth/GT', images['depthGT'], epoch)
@@ -217,6 +246,7 @@ def write_on_board_images_stg1(writer, images, epoch):
     writer.add_image('mask/pred', images['mask'], epoch)
     writer.add_image('depth*mask', images['depth_mask'], epoch)
 
+# Show images on TensorBoardX for Stage 2
 def write_on_board_images_stg2(writer, images, epoch):
     writer.add_image('RGB', images['RGB'], epoch)
     writer.add_image('depth/GT', images['depthGT'], epoch)
@@ -225,9 +255,11 @@ def write_on_board_images_stg2(writer, images, epoch):
     writer.add_image('mask/pred', images['mask'], epoch)
     writer.add_image('mask/rendered', images['mask_rendered'], epoch)
 
+# Write each iteration on the Tensorboard
 def write_on_board_lr(writer, lr, iteration):
     for i in range(len(lr)):
         writer.add_scalar(f"lr_{i}", lr[i], iteration)
 
+# Create grid to show training progress or whatever
 def make_grid(t):
     return torchvision.utils.make_grid(t, normalize=True)

@@ -1,3 +1,9 @@
+"""
+
+Compute error metrics 
+
+"""
+
 import options
 import utils
 from trainer import Validator

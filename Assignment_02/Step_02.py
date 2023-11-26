@@ -23,7 +23,7 @@ import torchvision.transforms as transforms # Transformations that can be perfor
 
 
 # Import some packages for logging training and showing progress
-from tqdm_loggable.auto import tqdm
+import tqdm
 from tqdm_loggable.tqdm_logging import tqdm_logging
 import datetime
 import logging

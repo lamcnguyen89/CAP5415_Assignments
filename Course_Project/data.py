@@ -1,4 +1,8 @@
-"""Pytorch Dataset and Dataloader for 3D PCG"""
+"""
+
+Pytorch Dataset and Dataloader for 3D PCG
+
+"""
 import numpy as np
 import scipy
 import torch
@@ -118,7 +122,7 @@ class PointCloud2dDataset(Dataset):
         images = batch_n["image_in"][modelIdx, angleIdx]
         depthGT = np.transpose(batch_n["depth"][modelIdx], axes=[0, 2, 3, 1])
         maskGT = np.transpose(batch_n["mask"][modelIdx], axes=[0, 2, 3, 1])\
-                   .astype(np.int)
+                   .astype(int)
 
         # Convert to Tensor
         images = torch.from_numpy(images).permute((0,3,1,2))

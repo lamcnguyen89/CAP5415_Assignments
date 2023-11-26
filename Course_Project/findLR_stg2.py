@@ -1,3 +1,10 @@
+"""
+
+Find the optimal learning rate for point cloud fusion and for generating models from novel viewpoints
+
+"""
+
+
 import options
 import utils
 from trainer import TrainerStage2

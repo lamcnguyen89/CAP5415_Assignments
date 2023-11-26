@@ -3,9 +3,9 @@
 
 """
 
-import options
-import utils
-from trainer import TrainerStage2
+import options # This module deals with passing arguments from the command line
+import utils # This module contains alot of functions that will be used over and over again
+from trainer import TrainerStage2 # This module contains the actual code for training the model
 
 if __name__ == "__main__":
 
@@ -13,8 +13,11 @@ if __name__ == "__main__":
     print("Train structure generator  with joint 2D optimization from novel viewpoints")
     print("=======================================================")
 
+    # Get training inputs from the command line or script file. 
+    # Examples of inputs are which GPU used, learning rate, number of epochs, etc...
     cfg = options.get_arguments()
 
+    # Set up folder paths to save various files
     EXPERIMENT = f"{cfg.model}_{cfg.experiment}"
     MODEL_PATH = f"models/{EXPERIMENT}"
     LOG_PATH = f"logs/{EXPERIMENT}"
@@ -22,6 +25,7 @@ if __name__ == "__main__":
     utils.make_folder(MODEL_PATH)
     utils.make_folder(LOG_PATH)
 
+    # Set up loss function, data, optimizer, learning rate, etc... for the actual training
     criterions = utils.define_losses()
     dataloaders = utils.make_data_novel(cfg)
 
@@ -32,6 +36,7 @@ if __name__ == "__main__":
     logger = utils.make_logger(LOG_PATH)
     writer = utils.make_summary_writer(EXPERIMENT)
 
+    # After each epoch of training, log data and save model information
     def on_after_epoch(model, df_hist, images, epoch, saveEpoch):
         utils.save_best_model(MODEL_PATH, model, df_hist)
         utils.checkpoint_model(MODEL_PATH, model, epoch, saveEpoch)
@@ -39,12 +44,15 @@ if __name__ == "__main__":
         utils.write_on_board_losses_stg2(writer, df_hist)
         utils.write_on_board_images_stg2(writer, images, epoch)
 
+    # After each batch, record data, and do certain other tasks
     if cfg.lrSched is not None:
         def on_after_batch(iteration):
             utils.write_on_board_lr(writer, scheduler.get_lr(), iteration)
             scheduler.step(iteration)
     else: on_after_batch = None
 
+    # Create an instance of the actual training with all the inputs created above.
+    # Log the training
     trainer = TrainerStage2(
         cfg, dataloaders, criterions, on_after_epoch, on_after_batch) 
 

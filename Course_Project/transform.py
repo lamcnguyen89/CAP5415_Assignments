@@ -1,3 +1,10 @@
+"""
+This module performs the matrix manipulations for combining the 2D Point Cloud projections to a single 3D model
+
+"""
+
+
+
 import numpy as np
 import torch
 import torch.nn as nn

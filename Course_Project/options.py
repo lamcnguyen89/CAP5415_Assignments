@@ -12,7 +12,7 @@ def parse_arguments():
 
     parser = argparse.ArgumentParser("Pytorch 3D Point Cloud Generation")
 
-    # Training related
+    # Training related: Input things like Epoch, folder path to data, learning rate, target file etc...
     parser.add_argument(
         "--experiment", default="0",
         help="name for experiment")
@@ -143,7 +143,7 @@ def parse_arguments():
 
     return parser.parse_args()
 
-# Get the arguments input from the commandline and script
+# Get the arguments input from the commandline and script and return them into an organized form for the model to train
 def get_arguments():
     cfg = parse_arguments()
     # these stay fixed
@@ -158,19 +158,26 @@ def get_arguments():
     cfg.inH, cfg.inW = [int(x) for x in cfg.inSize.split("x")]
     cfg.outH, cfg.outW = [int(x) for x in cfg.outSize.split("x")]
     cfg.H, cfg.W = [int(x) for x in cfg.predSize.split("x")]
+    
+    # Breaks down 3d model to a series of 2D projections for training
     cfg.Khom3Dto2D = torch.Tensor([[cfg.W, 0, 0, cfg.W / 2],
                                    [0, -cfg.H, 0, cfg.H / 2],
                                    [0, 0, -1, 0],
                                    [0, 0, 0, 1]]).float().to(cfg.device)
+    
+    # After the model is trained, this function will convert a single 2D image to a tensor that the trained model can convert to 3D
     cfg.Khom2Dto3D = torch.Tensor([[cfg.outW, 0, 0, cfg.outW / 2],
                                    [0, -cfg.outH, 0, cfg.outH / 2],
                                    [0, 0, -1, 0],
                                    [0, 0, 0, 1]]).float().to(cfg.device)
+    
+    # Fuse multiple 2D point cloud projections into single 3D point cloud model
     cfg.fuseTrans = F.normalize(
         torch.from_numpy(
             np.load(f"{cfg.path}/trans_fuse{cfg.outViewN}.npy")),
         p=2, dim=1).to(cfg.device)
-
+ 
+    # Display data on the training parameters
     print(f"EXPERIMENT: {cfg.model}_{cfg.experiment}")
     print("------------------------------------------")
     print(f"input:{cfg.inH}x{cfg.inW}, output:{cfg.outH}x{cfg.outW}, pred:{cfg.H}x{cfg.W}")

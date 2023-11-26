@@ -1,3 +1,9 @@
+"""
+
+Creates 3D models from the CAD models for evaluation
+
+"""
+
 import scipy.io
 import numpy as np
 import os,sys

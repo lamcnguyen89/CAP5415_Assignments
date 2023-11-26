@@ -1,3 +1,10 @@
+"""
+
+Find the optimal learning rate for training the Autoencoder that learns a particular 3D object.
+
+"""
+
+
 import options
 import utils
 from trainer import TrainerStage1

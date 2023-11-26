@@ -1,3 +1,9 @@
+"""
+
+This module creates the training setup, configuration and validation
+
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -8,6 +14,8 @@ import transform
 import utils
 
 
+# In this stage, we create an autoencoder and train it to learn the shape of a particular object. 
+# Note that we are training one object type at a time.
 class TrainerStage1:
     '''Train loop and evaluation for stage 1 Structure generator'''
     def __init__(self, cfg, data_loaders, criterions,
@@ -237,6 +245,9 @@ class TrainerStage1:
         writer.add_figure('findLR', fig)
 
 
+
+# Fuse the 2D projections into a 3d Point Cloud Model
+# Then adjust this fusion process through training
 class TrainerStage2:
     '''Train loop and evaluation for stage 2 with pseudo-renderer'''
     def __init__(self, cfg, data_loaders, criterions,
@@ -460,6 +471,7 @@ class TrainerStage2:
         writer.add_figure('findLR', fig)
 
 
+# Tests the accuracy of the Autoencoder in its task of creating a 3D point cloud model from a single 2D image
 class Validator:
     '''Perform Validation on the trained Structure generator'''
     def __init__(self, cfg, dataset):

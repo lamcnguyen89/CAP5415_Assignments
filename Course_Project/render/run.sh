@@ -1,3 +1,5 @@
+# Renders ground Truth Images using Blender
+
 blender blank.blend -b -P render_fixed.py -- /dataset/ShapeNetCore.v2 $1 $1.list 128 $2
 blender blank.blend -b -P render.py -- /dataset/ShapeNetCore.v2 $1 $1.list 128
 python2 convertEXR.py $1 $1.list 128 $2
