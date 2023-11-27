@@ -158,13 +158,14 @@ cython_debug/
 *.tar.gz
 *dataset/
 *data/
-*models/
 *03001627_depth/
 *03001627_depth_fixed8/
 *03001627_inputRGB/
 *Course_Project/data/03001627_testGT/
 Course_Project/data/03001627_test.list
 03001627_train.list
+*.pth
+
 
 
 # PyCharm
