@@ -7,6 +7,7 @@ import numpy as np
 import scipy
 import torch
 from torch.utils.data import DataLoader, Dataset
+import os
 
 
 class PointCloud2dDataset(Dataset):
@@ -89,7 +90,7 @@ class PointCloud2dDataset(Dataset):
         depthGT = np.expand_dims(
             batch_n["depth"][modelIdxTile, sampleIdx], axis=-1)
         maskGT = np.expand_dims(
-            batch_n["mask"][modelIdxTile, sampleIdx], axis=-1).astype(np.int)
+            batch_n["mask"][modelIdxTile, sampleIdx], axis=-1).astype(int)
         # To tensor
         images = torch.from_numpy(images).permute((0,3,1,2))
         targetTrans = torch.from_numpy(targetTrans)

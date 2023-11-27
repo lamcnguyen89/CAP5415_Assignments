@@ -2,6 +2,7 @@
 
 import logging
 import os
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -114,7 +115,9 @@ def build_structure_generator(cfg):
     statement = "Constructing the Autoencoder"
 
     if cfg.loadPath is not None:
-        LOAD_PATH = f"models/{cfg.loadPath}"
+        os.path.abspath(os.curdir)
+        #os.chdir("..")
+        LOAD_PATH = f"{os.path.abspath(os.curdir)}/Stage_01_Pretraining/models/{cfg.loadPath}"
 
         if cfg.loadEpoch is None:
             model.load_state_dict(torch.load(f"{LOAD_PATH}/best.pth"))

@@ -5,6 +5,12 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
+import os
+
+os.path.abspath(os.curdir)
+os.chdir("..")
+app_path = os.path.abspath(os.curdir)
+
 
 # The parse arguments function translates commands from the bash/unix commandline into a format that is readable for the python code
 def parse_arguments():
@@ -21,7 +27,7 @@ def parse_arguments():
         help="name for model")
 
     parser.add_argument(
-        "--path", default="../data",
+        "--path", default=f"{app_path}/data",
         help="path to data folder")
     parser.add_argument(
         "--category", default="03001627",
