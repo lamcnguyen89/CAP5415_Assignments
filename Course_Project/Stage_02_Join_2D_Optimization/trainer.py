@@ -94,7 +94,7 @@ class TrainerStage2:
                     for group in optimizer.param_groups:
                         for param in group['params']:
                             param.data = param.data.add(
-                                -self.cfg.trueWD * group['lr'], param.data)
+                                param.data, alpha = -self.cfg.trueWD * group['lr'] )
                 optimizer.step()
 
             if self.on_after_batch is not None:
@@ -225,8 +225,7 @@ class TrainerStage2:
                     for group in optimizer.param_groups:
                         for param in group['params']:
                             param.data = param.data.add(
-                                -self.cfg.trueWD * group['lr'],
-                                param.data)
+                                param.data, alpha = -self.cfg.trueWD * group['lr'])
                 optimizer.step()
 
             losses.append(loss.item())
