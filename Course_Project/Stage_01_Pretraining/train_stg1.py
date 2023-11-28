@@ -24,8 +24,8 @@ if __name__ == "__main__":
 
     # Set up folder paths to save various files
     EXPERIMENT = f"{cfg.model}_{cfg.experiment}"
-    MODEL_PATH = f"models/{EXPERIMENT}"
-    LOG_PATH = f"logs/{EXPERIMENT}"
+    MODEL_PATH = f"Stage_01_Pretraining/models/{EXPERIMENT}"
+    LOG_PATH = f"Stage_01_Pretraining/logs/{EXPERIMENT}"
 
     utils.make_folder(MODEL_PATH)
     utils.make_folder(MODEL_PATH)

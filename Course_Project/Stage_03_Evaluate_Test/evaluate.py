@@ -17,7 +17,7 @@ if __name__ == "__main__":
     cfg.batchSize = cfg.inputViewN
     # cfg.chunkSize = 50
 
-    RESULTS_PATH = f"results/{cfg.model}_{cfg.experiment}"
+    RESULTS_PATH = f"Stage_03_Evaluate_Test/results/{cfg.model}_{cfg.experiment}"
     utils.make_folder(RESULTS_PATH)
 
     dataloaders = utils.make_data_fixed(cfg)

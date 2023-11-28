@@ -35,7 +35,7 @@ def linear_block(in_c, out_c):
 
 #
 def pixel_bias(outViewN, outW, outH, renderDepth):
-    X, Y = torch.meshgrid([torch.arange(outH), torch.arange(outW)])
+    X, Y = torch.meshgrid([torch.arange(outH), torch.arange(outW)],indexing="xy")
     X, Y = X.float(), Y.float() # [H,W]
     initTile = torch.cat([
         X.repeat([outViewN, 1, 1]), # [V,H,W]

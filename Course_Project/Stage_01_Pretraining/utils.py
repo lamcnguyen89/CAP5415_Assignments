@@ -117,7 +117,7 @@ def build_structure_generator(cfg):
     if cfg.loadPath is not None:
         os.path.abspath(os.curdir)
         #os.chdir("..")
-        LOAD_PATH = f"{os.path.abspath(os.curdir)}/Stage_01_Pretraining/models/{cfg.loadPath}"
+        LOAD_PATH = f"models/{cfg.loadPath}"
 
         if cfg.loadEpoch is None:
             model.load_state_dict(torch.load(f"{LOAD_PATH}/best.pth"))

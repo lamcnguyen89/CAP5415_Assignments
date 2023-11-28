@@ -19,8 +19,8 @@ if __name__ == "__main__":
 
     # Set up folder paths to save various files
     EXPERIMENT = f"{cfg.model}_{cfg.experiment}"
-    MODEL_PATH = f"models/{EXPERIMENT}"
-    LOG_PATH = f"logs/{EXPERIMENT}"
+    MODEL_PATH = f"Stage_02_Join_2D_Optimization/models/{EXPERIMENT}"
+    LOG_PATH = f"Stage_02_Join_2D_Optimization/logs/{EXPERIMENT}"
 
     utils.make_folder(MODEL_PATH)
     utils.make_folder(LOG_PATH)
