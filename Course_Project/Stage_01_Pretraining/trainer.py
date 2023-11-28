@@ -139,7 +139,8 @@ class TrainerStage1:
             XYGT = torch.cat([
                 XGT.repeat([self.cfg.outViewN, 1, 1]), 
                 YGT.repeat([self.cfg.outViewN, 1, 1])], dim=0) #[2V,H,W]
-            XYGT = XYGT.unsqueeze(dim=0).to(self.cfg.device) # [1,2V,H,W] 
+            XYGT = XYGT.unsqueeze(dim=0).to(self.cfg.device) # [1,2V,H,W]
+            XYGT = XYGT.expand(100,-1,-1,-1) 
 
             with torch.set_grad_enabled(False):
                 XYZ, maskLogit = model(input_images)
