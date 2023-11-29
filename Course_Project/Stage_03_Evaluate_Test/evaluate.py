@@ -6,6 +6,11 @@
 import options
 import utils
 from trainer import Validator
+import os
+
+os.path.abspath(os.curdir)
+os.chdir("..")
+app_path = os.path.abspath(os.curdir)
 
 if __name__ == "__main__":
 
@@ -17,7 +22,7 @@ if __name__ == "__main__":
     cfg.batchSize = cfg.inputViewN
     # cfg.chunkSize = 50
 
-    RESULTS_PATH = f"Stage_03_Evaluate_Test/results/{cfg.model}_{cfg.experiment}"
+    RESULTS_PATH = f"{app_path}/Course_Project/Stage_03_Evaluate_Test/results/{cfg.model}_{cfg.experiment}"
     utils.make_folder(RESULTS_PATH)
 
     dataloaders = utils.make_data_fixed(cfg)
