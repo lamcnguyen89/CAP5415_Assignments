@@ -26,7 +26,7 @@ class Validator:
         self.dataset = dataset
         self.history = []
         self.CADs = dataset.CADs
-        self.result_path = f"{app_path}/Stage_03_Evaluate_Test/results/{cfg.model}_{cfg.experiment}"
+        self.result_path = f"{app_path}/Course_Project/Stage_03_Evaluate_Test/results/{cfg.model}_{cfg.experiment}"
 
     def eval(self, model):
         print("======= EVALUATION START =======")

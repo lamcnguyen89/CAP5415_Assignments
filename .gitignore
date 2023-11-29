@@ -167,6 +167,7 @@ Course_Project/data/03001627_test.list
 *.pth
 *runs/
 .mat
+*results/
 
 
 # PyCharm

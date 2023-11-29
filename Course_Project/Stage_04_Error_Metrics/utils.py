@@ -18,6 +18,8 @@ import torchvision
 from PCGModel import Structure_Generator
 
 
+
+
 # Create folder to store data, or whatever is needed
 def make_folder(PATH):
     if not os.path.exists(PATH):
@@ -117,7 +119,7 @@ def build_structure_generator(cfg):
     if cfg.loadPath is not None:
         os.path.abspath(os.curdir)
         #os.chdir("..")
-        LOAD_PATH = f"{os.path.abspath(os.curdir)}/Stage_02_Join_2D_Optimization/models/{cfg.loadPath}"
+        LOAD_PATH = f"{os.path.abspath(os.curdir)}/Course_Project/Stage_02_Join_2D_Optimization/models/{cfg.loadPath}"
 
         if cfg.loadEpoch is None:
             model.load_state_dict(torch.load(f"{LOAD_PATH}/best.pth"))

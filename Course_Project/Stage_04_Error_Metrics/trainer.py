@@ -12,6 +12,11 @@ import torch
 
 import transform
 
+import os
+os.path.abspath(os.curdir)
+os.chdir("..")
+app_path = os.path.abspath(os.curdir)
+
 
 # Tests the accuracy of the Autoencoder in its task of creating a 3D point cloud model from a single 2D image
 class Validator:
@@ -22,7 +27,7 @@ class Validator:
         self.dataset = dataset
         self.history = []
         self.CADs = dataset.CADs
-        self.result_path = f"results/{cfg.model}_{cfg.experiment}"
+        self.result_path = f"{app_path}/Course_Project/Stage_03_Evaluate_Test/results/{cfg.model}_{cfg.experiment}"
 
     def eval(self, model):
         print("======= EVALUATION START =======")
