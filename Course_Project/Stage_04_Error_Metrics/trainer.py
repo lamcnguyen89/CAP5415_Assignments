@@ -33,7 +33,7 @@ class Validator:
             input_images = torch.from_numpy(cad['image_in'])\
                                 .permute((0,3,1,2))\
                                 .float().to(self.cfg.device)
-            points24 = np.zeros([self.cfg.inputViewN, 1], dtype=np.object)
+            points24 = np.zeros([self.cfg.inputViewN, 1], dtype=object)
 
             XYZ, maskLogit = model(input_images)
             mask = (maskLogit > 0).float()

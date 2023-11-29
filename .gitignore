@@ -165,7 +165,8 @@ cython_debug/
 Course_Project/data/03001627_test.list
 03001627_train.list
 *.pth
-
+*runs/
+.mat
 
 
 # PyCharm

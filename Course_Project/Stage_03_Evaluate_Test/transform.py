@@ -95,7 +95,7 @@ def render2D(cfg, XYZid, ML, renderTrans):  # [B,1,VHW]
         torch.arange(cfg.batchSize),
         torch.arange(cfg.novelN),
         torch.arange(cfg.outViewN * cfg.outH * cfg.outW)
-    ]) # [B,N,VHW]
+    ], indexing="xy") # [B,N,VHW]
     batchIdxCat = batchIdxCat.reshape([-1]).to(cfg.device) # [BNVHW]
     novelIdxCat = novelIdxCat.reshape([-1]).to(cfg.device) # [BNVHW]
 

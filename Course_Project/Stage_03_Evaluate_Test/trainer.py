@@ -9,9 +9,13 @@ import numpy as np
 import pandas as pd
 import scipy.io
 import torch
+import os
 
 import transform
 
+os.path.abspath(os.curdir)
+os.chdir("..")
+app_path = os.path.abspath(os.curdir)
 
 # Tests the accuracy of the Autoencoder in its task of creating a 3D point cloud model from a single 2D image
 class Validator:
@@ -22,7 +26,7 @@ class Validator:
         self.dataset = dataset
         self.history = []
         self.CADs = dataset.CADs
-        self.result_path = f"results/{cfg.model}_{cfg.experiment}"
+        self.result_path = f"{app_path}/Stage_03_Evaluate_Test/results/{cfg.model}_{cfg.experiment}"
 
     def eval(self, model):
         print("======= EVALUATION START =======")
@@ -33,7 +37,7 @@ class Validator:
             input_images = torch.from_numpy(cad['image_in'])\
                                 .permute((0,3,1,2))\
                                 .float().to(self.cfg.device)
-            points24 = np.zeros([self.cfg.inputViewN, 1], dtype=np.object)
+            points24 = np.zeros([self.cfg.inputViewN, 1], dtype=object)
 
             XYZ, maskLogit = model(input_images)
             mask = (maskLogit > 0).float()
