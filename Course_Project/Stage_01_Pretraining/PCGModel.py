@@ -137,10 +137,14 @@ class Structure_Generator(nn.Module):
         return XYZ, maskLogit
 
 
-# TESTING
-if __name__ == '__main__':
-    import options
-    cfg = options.get_arguments()
-    encoder = Encoder()
-    decoder = Decoder(cfg.outViewN, cfg.outW, cfg.outH, cfg.renderDepth)
-    model = Structure_Generator()
+# # TESTING
+# if __name__ == '__main__':
+#     import options
+#     cfg = options.get_arguments()
+#     encoder = Encoder()
+#     decoder = Decoder(cfg.outViewN, cfg.outW, cfg.outH, cfg.renderDepth)
+#     model = Structure_Generator()
+
+
+model = Structure_Generator()
+print(model)
