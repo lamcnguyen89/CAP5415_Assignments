@@ -19,3 +19,5 @@ Create segmentation algorithms for segmenting an image
 
 ## Course Project: 2D Image to 3D Model
 Create model to convert a single 2D image to a 3D Model
+
+What Now?
